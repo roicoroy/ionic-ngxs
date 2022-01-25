@@ -1,0 +1,27 @@
+{
+  "todos": [
+    {
+      "id": "94cg3DT83DRx",
+      "userId": 1,
+      "title": "qq"
+    },
+    {
+      "id": "8YpsSwTNu1YV",
+      "userId": 2,
+      "title": "123",
+      "completed": true
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Fábio Miranda",
+      "username": "fabiomiranda"
+    },
+    {
+      "id": 2,
+      "name": "Admin",
+      "username": "admin"
+    }
+  ]
+}
