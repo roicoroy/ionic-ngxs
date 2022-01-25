@@ -1,0 +1,7 @@
+{
+  "name": "ionic-ngxs",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
