@@ -14,11 +14,13 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { FormComponent } from './form/form.component';
 import { ListComponent } from './list/list.component';
+import { WaiterFormComponent } from './home/waiter-form/waiter-form.component';
+import { WaiterState } from './states/waiter.state';
 
 @NgModule({
   declarations: [
     AppComponent,
-
+    // WaiterFormComponent
   ],
   entryComponents: [],
   imports: [
@@ -26,7 +28,8 @@ import { ListComponent } from './list/list.component';
     IonicModule.forRoot(),
     AppRoutingModule,
     NgxsModule.forRoot([
-      TodoState
+      TodoState,
+      WaiterState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),

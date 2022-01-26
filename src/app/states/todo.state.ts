@@ -37,7 +37,7 @@ export class TodoState {
   static getSelectedTodo(state: TodoStateModel) {
     return state.selectedTodo;
   }
-
+  //
   @Action(TodoActions.Get)
   getTodos({ getState, setState }: StateContext<TodoStateModel>) {
     return this.todoService.fetchTodos()

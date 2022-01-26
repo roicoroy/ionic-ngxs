@@ -7,6 +7,7 @@ import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { FormComponent } from '../form/form.component';
 import { ListComponent } from '../list/list.component';
+import { WaiterFormComponent } from './waiter-form/waiter-form.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ListComponent } from '../list/list.component';
   declarations: [
     HomePage,
     ListComponent,
-    FormComponent
+    FormComponent,
+    WaiterFormComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

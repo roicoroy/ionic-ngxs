@@ -1,4 +1,18 @@
 {
+  "waiters": [
+    {
+      "id": 1,
+      "name": "Jose"
+    },
+    {
+      "id": "Bdkx6zJI08nV",
+      "name": "q"
+    },
+    {
+      "id": "ecqksyNM4ag0",
+      "name": "qq"
+    }
+  ],
   "todos": [
     {
       "id": "94cg3DT83DRx",
