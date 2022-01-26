@@ -5,9 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
-import { FormComponent } from '../form/form.component';
-import { ListComponent } from '../list/list.component';
 import { WaiterFormComponent } from './waiter-form/waiter-form.component';
+import { WaitersListComponent } from './waiters-list/waiters-list.component';
 
 
 @NgModule({
@@ -20,9 +19,8 @@ import { WaiterFormComponent } from './waiter-form/waiter-form.component';
   ],
   declarations: [
     HomePage,
-    ListComponent,
-    FormComponent,
-    WaiterFormComponent
+    WaiterFormComponent,
+    WaitersListComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
