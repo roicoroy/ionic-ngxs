@@ -51,16 +51,16 @@ export class PointsService {
         return this.http.get<Point[]>(`${this.baseUrl}/points`);
     }
     deletePoint(id: number) {
-        this.deleteItem(id);
+        // this.deleteItem(id);
         return this.http.delete(`${this.baseUrl}/points/${id}`); // .subscribe((res)=> console.log(res));
     }
     addPoint(payload: Point) {
         payload.id = nanoid(12);
-        this.addItem(payload);
+        // this.addItem(payload);
         return this.http.post<Point>(`${this.baseUrl}/points`, payload);
     }
     updatePoint(payload: Point, id: number) {
-        this.updateItem(payload);
+        // this.updateItem(payload);
         return this.http.put<Point>(`${this.baseUrl}/points/${id}`, payload);
     }
     // Add on Storage

@@ -46,7 +46,6 @@ export class PointsComponent implements OnInit {
     const { data } = await modal.onWillDismiss();
     console.log(data);
     if (data) {
-      // this.pointsService.updatePoint(data);
       this.edit(data);
     }
   }
