@@ -3,7 +3,7 @@ import { IPoint } from './point.interface';
 
 
 export interface IWaiter {
-    id: number;
+    id?: number;
     name: string;
     points?: IPoint[];
     tipsShare?: number;

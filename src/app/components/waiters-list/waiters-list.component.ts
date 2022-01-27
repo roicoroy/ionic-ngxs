@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { WaiterActions } from 'src/app/actions/waiter.action';
-import { Waiter } from 'src/app/models/Waiter';
+import { Waiter } from 'src/app/models/waiters.type';
 import { WaiterState } from 'src/app/states/waiter.state';
 
 @Component({
@@ -22,7 +22,7 @@ export class WaitersListComponent implements OnInit {
   deleteWaiter(id: number) {
     this.store.dispatch(new WaiterActions.Delete(id));
   }
-  editWaiter(payload: Waiter) {
-    this.store.dispatch(new WaiterActions.SetSelected(payload));
-  }
+  // editWaiter(payload: Waiter) {
+  //   this.store.dispatch(new WaiterActions.SetSelected(payload));
+  // }
 }

@@ -3,12 +3,12 @@
         <ion-col>Waiter's List</ion-col>
     </ion-row>
     <ion-row *ngFor="let w of waitersList | async">
-        <ion-col>{{ w.name }}</ion-col>
-        <ion-col>
+        <ion-col>{{ w.name  }}</ion-col>
+        <!-- <ion-col>
             <ion-button (click)="editWaiter(w)" expand="block" fill="clear" shape="round">
                 edit
             </ion-button>
-        </ion-col>
+        </ion-col> -->
         <ion-col>
             <ion-button (click)="deleteWaiter(w.id)" expand="block" fill="clear" shape="round">
                 delete

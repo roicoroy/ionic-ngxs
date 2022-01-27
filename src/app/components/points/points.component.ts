@@ -4,7 +4,6 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { PointActions } from 'src/app/actions/point.action';
 import { Point } from 'src/app/models/point.type';
-import { Waiter } from 'src/app/models/Waiter';
 import { PointsState } from 'src/app/states/point.state';
 import { PointsModalComponent } from './points-modal/points-modal.component';
 

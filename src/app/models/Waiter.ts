@@ -1,4 +1,4 @@
-export interface Waiter {
-    id: number;
-    name: string;
-}
+// export interface Waiter {
+//     id?: number;
+//     name?: string;
+// }

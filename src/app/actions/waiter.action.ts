@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
-import { Waiter } from '../models/Waiter';
+// import { Waiter } from '../models/Waiter';
+
+import { Waiter } from '../models/waiters.type';
 
 export namespace WaiterActions {
 
@@ -13,7 +15,7 @@ export namespace WaiterActions {
     }
     export class Update {
         static readonly type = '[Waiter] Update';
-        constructor(public payload: Waiter, public id: number) {
+        constructor(public payload: Waiter, public id?: number) {
         }
     }
     export class Delete {

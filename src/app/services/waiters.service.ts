@@ -86,91 +86,39 @@ export class WaitersService {
   //   return this.storage.set(WAITERS_LIST_KEY, waitersList);
   // }
   fetchWaiters() {
-    return this.ionStorageService.getKeyAsObservable(WAITERS_LIST_KEY).pipe(tap((waitersListResponse) => {
-      if (!waitersListResponse) {
-        const myHttp = this.http.get<Waiter[]>(`${this.baseUrl}/waiters`);
-        myHttp.subscribe(
-          (res)=>{
-            console.log(res);
-           },
-          (error)=>{
-            console.log(error);
-          },
-
-        );
-      } else {
-        return waitersListResponse;
-      }
-    }));
+    // return this.ionStorageService.getKeyAsObservable(WAITERS_LIST_KEY).pipe(tap((waitersListResponse) => {
+    //   if (!waitersListResponse) {
+    //     this.storage.set(WAITERS_LIST_KEY, this.waitersList);
+    //   }
+    // }));
+    // return this.http.get<Waiter[]>(`${this.baseUrl}/waiters`);
   }
-  addWaiter(payload: Waiter) {
-    if (payload) {
-      payload.id = nanoid(12);
-      console.log(payload);
-      this.addItem(payload).then((res) => {
-        console.log(res);
-
-      });
-      return this.http.post<Waiter>(`${this.baseUrl}/waiters`, payload);
-    }
+  addWaiter(payload: Waiter): Observable<Waiter> {
+    return;
+    // if (payload) {
+    //   payload.id = nanoid(12);
+    //   console.log(payload);
+    //   let add;
+    //   this.addItem(payload).then((res) => {
+    //     console.log(res);
+    //     add = res;
+    //   });
+    //   console.log(add);
+    //   // console.log(add);
+    //   // .then((res) => {
+    //   //   console.log(res);
+    //   // });
+    //   return of(add);
+      // return this.http.post<Waiter>(`${this.baseUrl}/waiters`, payload);
+    // }
   }
   updateWaiter(payload: Waiter, id: number) {
-    this.updateItem(payload);
-    return this.http.put<Waiter>(`${this.baseUrl}/waiters/${id}`, payload);
+    // this.updateItem(payload);
+    // return this.http.put<Waiter>(`${this.baseUrl}/waiters/${id}`, payload);
   }
   deleteWaiter(id: number) {
-    this.deleteItem(id);
-    return this.http.delete(`${this.baseUrl}/waiters/${id}`);
+    // this.deleteItem(id);
+    // return this.http.delete(`${this.baseUrl}/waiters/${id}`);
   }
-  // Add on Storage
-  addItem(item: Waiter): Promise<any> {
-    // Specify a the return of a promess to use then block get the item was added
-    return this.storage.get(WAITERS_LIST_KEY)
-      .then((resWaiters: Waiter[]) => {
-        // Check if exist push it or return set ;
-        if (resWaiters) {
-          resWaiters.push(item);
-          return this.storage.set(WAITERS_LIST_KEY, resWaiters); // Return array with added form
-        } else {
-          return this.storage.set(WAITERS_LIST_KEY, [item]); // Return the same array
-        }
-      });
-  }
-  // Update
-  updateItem(item: Waiter): Promise<any> {
-    return this.storage.get(WAITERS_LIST_KEY)
-      .then((formItems: Waiter[]) => {
-        // If items does not exist or length is 0 return null
-        if (!formItems || formItems.length === 0) {
-          return null;
-        }
-        const newFormItem: Waiter[] = [];
 
-        // Loop througth the array and check if exist the added item
-        for (const form of formItems) {
-          if (form.id === item.id) {
-            newFormItem.push(item); // Push newItem
-          } else {
-            newFormItem.push(form);
-          }
-        }
-        return this.storage.set(WAITERS_LIST_KEY, newFormItem);
-      });
-  }
-  // Delete
-  deleteItem(id: number): Promise<any> {
-    return this.storage.get(WAITERS_LIST_KEY)
-      .then((formItems: Waiter[]) => {
-        if (!formItems || formItems.length === 0) {
-          return null;
-        }
-        const formsToKeep: Waiter[] = [];
-        for (const form of formItems) {
-          if (form.id !== id) {
-            formsToKeep.push(form);
-          }
-        }
-        return this.storage.set(WAITERS_LIST_KEY, formsToKeep);
-      });
-  }
 }
