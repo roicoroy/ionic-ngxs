@@ -85,12 +85,12 @@ export class PointsState {
             }));
     }
 
-    @Action(PointActions.SetSelected)
-    setSelectedPointId({ getState, setState }: StateContext<any>, { payload }: PointActions.SetSelected) {
-        const state = getState();
-        setState({
-            ...state,
-            selectedPoint: payload
-        });
-    }
+    // @Action(PointActions.SetSelected)
+    // setSelectedPointId({ getState, setState }: StateContext<any>, { payload }: PointActions.SetSelected) {
+    //     const state = getState();
+    //     setState({
+    //         ...state,
+    //         selectedPoint: payload
+    //     });
+    // }
 }
