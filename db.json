@@ -1,22 +1,16 @@
 {
   "points": [
     {
-      "id": "tgCs19fOkFrh",
-      "label": "qqq",
+      "id": "i-Rxzt8LZmwv",
+      "label": "sssvfvf",
       "type": "checkbox",
       "value": 2
     },
     {
-      "id": "gHbVoxFhFKWT",
-      "label": "Answer phone",
+      "id": "kzCYkQIfQ0St",
+      "label": "Open wine",
       "type": "checkbox",
-      "value": 0.5
-    },
-    {
-      "id": "vdUed_w6ym7H",
-      "label": "Serve wine",
-      "type": "checkbox",
-      "value": 1
+      "value": 2
     }
   ],
   "waiters": []
