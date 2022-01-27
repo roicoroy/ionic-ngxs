@@ -3,7 +3,8 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import { WaiterActions } from '../actions/waiter.action';
 import { Waiter } from '../models/Waiter';
-import { WaiterService } from '../waiter.service';
+import { WaitersService } from '../services';
+
 
 export class WaiterStateModel {
     waiters: Waiter[];
@@ -19,7 +20,7 @@ export class WaiterStateModel {
 })
 @Injectable()
 export class WaiterState {
-    constructor(private waiterService: WaiterService) {
+    constructor(private waiterService: WaitersService) {
     }
     @Selector()
     static getWaiterList(state: WaiterStateModel) {
@@ -38,7 +39,7 @@ export class WaiterState {
                     ...state,
                     waiters: result,
                 });
-            }));
+            })); // .subscribe((res)=> console.log(res));
     }
     @Action(WaiterActions.Add)
     addWaiter({ getState, patchState }: StateContext<WaiterStateModel>, { payload }: WaiterActions.Add) {

@@ -11,6 +11,14 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'calculator-ngxs',
+    loadChildren: () => import('./calculator-ngxs/calculator-ngxs.module').then( m => m.CalculatorNgxsPageModule)
+  },
+  {
+    path: 'settings-ngxs',
+    loadChildren: () => import('./settings-ngxs/settings-ngxs.module').then( m => m.SettingsNgxsPageModule)
+  },
 ];
 
 @NgModule({

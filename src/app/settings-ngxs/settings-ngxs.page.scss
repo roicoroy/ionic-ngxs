@@ -1,0 +1,13 @@
+:root {
+  --ion-safe-area-top: 25px;
+  --ion-safe-area-bottom: 27px;
+}
+ion-slide {
+  height: calc(110vh - 200px);
+}
+ion-row.container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0px;
+}

@@ -12,10 +12,12 @@ import { NgxsModule } from '@ngxs/store';
 import { TodoState } from './states/todo.state';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
-import { FormComponent } from './form/form.component';
-import { ListComponent } from './list/list.component';
-import { WaiterFormComponent } from './home/waiter-form/waiter-form.component';
 import { WaiterState } from './states/waiter.state';
+import { IonicStorageModule } from '@ionic/storage-angular';
+import { IonicSelectableModule } from 'ionic-selectable';
+import { Drivers } from '@ionic/storage';
+import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import { PointsState } from './states/point.state';
 
 @NgModule({
   declarations: [
@@ -28,13 +30,19 @@ import { WaiterState } from './states/waiter.state';
     IonicModule.forRoot(),
     AppRoutingModule,
     NgxsModule.forRoot([
-      TodoState,
+      // TodoState,
+      PointsState,
       WaiterState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
     HttpClientModule,
     ReactiveFormsModule,
+    IonicSelectableModule,
+    IonicStorageModule.forRoot({
+      // eslint-disable-next-line no-underscore-dangle
+      driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB]
+    }),
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
