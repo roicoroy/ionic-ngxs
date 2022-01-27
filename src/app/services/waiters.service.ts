@@ -88,26 +88,16 @@ export class WaitersService {
   fetchWaiters() {
     return this.ionStorageService.getKeyAsObservable(WAITERS_LIST_KEY).pipe(tap((waitersListResponse) => {
       if (!waitersListResponse) {
-        return this.http.get<Waiter[]>(`${this.baseUrl}/waiters`)
-          .pipe(
-          //   tap((res: Waiter[]) => {
-          //   console.log('dsfdsfdsfd', res);
-          //   if (!res) {
-          //     this.storage.set(WAITERS_LIST_KEY, this.waitersList);
-          //   } else {
-          //     return res;
-          //   }
-          // }),
-          catchError(error => {
-            if (error.error instanceof ErrorEvent) {
-                this.errorMsg = `Error: ${error.error.message}`;
-            } else {
-                this.errorMsg = `Error: ${error.message}`;
-            }
-            console.log(this.errorMsg);
-            return of([]);
-        })
-          );
+        const myHttp = this.http.get<Waiter[]>(`${this.baseUrl}/waiters`);
+        myHttp.subscribe(
+          (res)=>{
+            console.log(res);
+           },
+          (error)=>{
+            console.log(error);
+          },
+
+        );
       } else {
         return waitersListResponse;
       }

@@ -20,7 +20,9 @@ export class WaiterStateModel {
 })
 @Injectable()
 export class WaiterState {
-    constructor(private waiterService: WaitersService) {
+    constructor(
+      private waiterService: WaitersService
+    ) {
     }
     @Selector()
     static getWaiterList(state: WaiterStateModel) {
@@ -34,6 +36,7 @@ export class WaiterState {
     getWaiter({ getState, setState }: StateContext<WaiterStateModel>) {
         return this.waiterService.fetchWaiters()
             .pipe(tap((result) => {
+              console.log(result);
                 const state = getState();
                 setState({
                     ...state,
