@@ -2,7 +2,14 @@
 //     background: red;
 //     width: 100%;
 // }
+ion-card {
+  ion-item {
+    // position: relative;
+    // left: 15%;
+    // margin-top: -10%;
+  }
+}
 ion-input {
-    border: 1px solid var(--ion-color-medium);
-    margin-left: 5%;
+  border: 1px solid var(--ion-color-medium);
+  margin-left: 5%;
 }

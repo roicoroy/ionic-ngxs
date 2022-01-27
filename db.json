@@ -1,22 +1,10 @@
 {
   "points": [
     {
-      "id": "W4m2MM-6hx1S",
-      "label": "asd",
-      "type": "checkbox",
-      "value": 1
-    },
-    {
-      "id": "1AYvvvNHOckB",
-      "label": "qwwe",
+      "id": "O9XHuaJdBQPg",
+      "label": "Call staff",
       "type": "checkbox",
       "value": 2
-    },
-    {
-      "id": "FRe5PFKq13wK",
-      "label": "aaa",
-      "type": "checkbox",
-      "value": 1.5
     }
   ],
   "waiters": []

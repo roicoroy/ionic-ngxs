@@ -3,7 +3,8 @@
   --ion-safe-area-bottom: 27px;
 }
 ion-slide {
-  height: calc(110vh - 200px);
+  // height: calc(110vh - 200px);
+  height: 110vh;
 }
 ion-row.container {
   position: absolute;

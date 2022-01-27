@@ -19,7 +19,7 @@
   </ion-header>
   <ion-header>
     <ion-toolbar>
-      <ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="page">
+      <ion-segment mode="mds" (ionChange)="segmentChanged($event)" [(ngModel)]="page">
         <ion-segment-button value="0" (click)="selectedTab(0)">
           <ion-label> Waiters </ion-label>
         </ion-segment-button>
@@ -30,7 +30,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-slides #slider (ionSlideWillChange)="moveButton()" pager="true" [options]="slideOpts">
+  <ion-slides #slider (ionSlideWillChange)="moveButton()" pager="false" [options]="slideOpts">
     <ion-slide class='waiters'>
       <ion-row class='container'>
         <ion-col size="12">

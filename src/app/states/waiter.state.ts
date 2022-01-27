@@ -52,8 +52,6 @@ export class WaiterState {
     }
     @Selector()
     static getWaiterList(state: WaiterStateModel) {
-        console.log(state);
-
         return state.waitersList;
     }
     @Action(WaiterActions.Get)
@@ -82,7 +80,6 @@ export class WaiterState {
             id: nanoid(12),
             name: payload.name,
         });
-        // payload.id = nanoid(12);
         const result = waiter;
         this.addItem(result).then(() => {
             const state = getState();

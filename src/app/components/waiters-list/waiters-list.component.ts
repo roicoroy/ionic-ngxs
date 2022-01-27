@@ -22,7 +22,4 @@ export class WaitersListComponent implements OnInit {
   deleteWaiter(id: number) {
     this.store.dispatch(new WaiterActions.Delete(id));
   }
-  // editWaiter(payload: Waiter) {
-  //   this.store.dispatch(new WaiterActions.SetSelected(payload));
-  // }
 }
