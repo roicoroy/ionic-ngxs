@@ -21,7 +21,6 @@ export class PointsStateModel {
 export class PointsState {
     constructor(
         private pointsService: PointsService,
-        private storage: Storage,
     ) {
     }
     @Selector()
@@ -51,9 +50,7 @@ export class PointsState {
                 patchState({
                     points: [...state.points, result]
                 });
-            })).subscribe((res) => {
-                console.log('addWaiter Point State', res);
-            });
+            }));
     }
 
     @Action(PointActions.Update)
@@ -89,7 +86,7 @@ export class PointsState {
     }
 
     @Action(PointActions.SetSelected)
-    setSelectedPointId({ getState, setState }: StateContext<PointsStateModel>, { payload }: PointActions.SetSelected) {
+    setSelectedPointId({ getState, setState }: StateContext<any>, { payload }: PointActions.SetSelected) {
         const state = getState();
         setState({
             ...state,

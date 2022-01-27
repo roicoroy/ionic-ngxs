@@ -21,6 +21,8 @@ export class PointsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+  ionViewWillEnter() {
     this.store.dispatch(new PointActions.Get());
   }
   async addPoint() {
@@ -50,15 +52,12 @@ export class PointsComponent implements OnInit {
     }
   }
   add(payload: Point) {
-    this.store.dispatch(new PointActions.Add(payload))
-      .subscribe((res) => {
-        console.log(res);
-      });
+    this.store.dispatch(new PointActions.Add(payload));
   }
   delete(id: number) {
     this.store.dispatch(new PointActions.Delete(id));
   }
-  edit(payload: Point) {
-    this.store.dispatch(new PointActions.SetSelected(payload));
+  edit(payload) {
+    this.store.dispatch(new PointActions.Update(payload, payload.id));
   }
 }
