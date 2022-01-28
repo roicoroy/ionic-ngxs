@@ -68,11 +68,11 @@ export class PointsModalComponent implements OnInit {
     this.modalController.dismiss();
   }
   addNewPoint() {
-    const newPoint = new Point({
+    const newPoint = {
       label: this.createPointsForm.value.label,
       value: this.numberize(this.valueField.value),
       type: 'checkbox'
-    });
+    };
     if (this.createPointsForm.valid) {
       this.modalController.dismiss(newPoint);
       // console.log('form valid', this.createPointsForm.value);

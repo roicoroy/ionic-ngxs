@@ -22,6 +22,7 @@ export class PointsComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new PointActions.Get());
+
   }
   ionViewWillEnter() {
   }
