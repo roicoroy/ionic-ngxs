@@ -2,7 +2,12 @@
 /* eslint-disable max-len */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonSlides, NavController } from '@ionic/angular';
-import { sliderFadeAnimation } from './slider.animation';
+import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { Point } from '../models/point.type';
+import { PointsState } from '../states/point.state';
+import { Storage } from '@ionic/storage-angular';
+import { POINTS_LIST_KEY } from '../services';
 
 @Component({
    selector: 'app-settings-ngxs',
@@ -11,14 +16,14 @@ import { sliderFadeAnimation } from './slider.animation';
 })
 export class SettingsNgxsPage implements OnInit {
    @ViewChild('slider') slider: IonSlides;
+   @Select(PointsState.getPointsList) pointsList: Observable<Point[]>;
    page;
    slideOpts = {
-
    };
    constructor(
-      private navCtrl: NavController
+      private navCtrl: NavController,
+      private storage: Storage,
    ) { }
-
    ngOnInit() {
    }
    ionViewDidEnter() {
@@ -28,16 +33,19 @@ export class SettingsNgxsPage implements OnInit {
    selectedTab(index: number) {
       this.slider.slideTo(index);
    }
-
    async moveButton() {
       const index = await this.slider.getActiveIndex();
       this.page = index.toString();
    }
-
    segmentChanged(ev: any) {
       // console.log('Segment changed', ev);
    }
    home() {
-      this.navCtrl.navigateBack('home');
+      this.navCtrl.navigateBack('home').then(() => {
+         // this.pointsList.subscribe((points) => {
+         //    console.log(points);
+         //    this.storage.set(POINTS_LIST_KEY, points);
+         // });
+      });
    }
 }

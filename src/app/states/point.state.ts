@@ -35,6 +35,8 @@ export class PointsState {
     getPoints({ getState, setState }: StateContext<PointsStateModel>) {
         return this.pointsService.fetchPoints()
             .pipe(tap((result) => {
+                console.log(result);
+
                 const state = getState();
                 setState({
                     ...state,
@@ -50,6 +52,7 @@ export class PointsState {
                 patchState({
                     points: [...state.points, result]
                 });
+                console.log(state.points);
             }));
     }
 
@@ -85,12 +88,12 @@ export class PointsState {
             }));
     }
 
-    // @Action(PointActions.SetSelected)
-    // setSelectedPointId({ getState, setState }: StateContext<any>, { payload }: PointActions.SetSelected) {
-    //     const state = getState();
-    //     setState({
-    //         ...state,
-    //         selectedPoint: payload
-    //     });
-    // }
+    @Action(PointActions.SetSelected)
+    setSelectedPointId({ getState, setState }: StateContext<any>, { payload }: PointActions.SetSelected) {
+        const state = getState();
+        setState({
+            ...state,
+            selectedPoint: payload
+        });
+    }
 }

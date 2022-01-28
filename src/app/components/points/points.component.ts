@@ -21,9 +21,9 @@ export class PointsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.store.dispatch(new PointActions.Get());
   }
   ionViewWillEnter() {
-    this.store.dispatch(new PointActions.Get());
   }
   async addPoint() {
     const modal = await this.modalController.create({

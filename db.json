@@ -1,14 +1,32 @@
 {
   "points": [
     {
-      "id": "i-Rxzt8LZmwv",
-      "label": "sssvfvf",
+      "id": "Q2zy_JvmEMcD",
+      "label": "asd",
+      "type": "checkbox",
+      "value": 1.5
+    },
+    {
+      "id": "Xe2bAXpifeps",
+      "label": "test",
       "type": "checkbox",
       "value": 2
     },
     {
-      "id": "kzCYkQIfQ0St",
-      "label": "Open wine",
+      "id": "vQ2JPevQi9Hk",
+      "label": "sdf",
+      "type": "checkbox",
+      "value": 1.5
+    },
+    {
+      "id": "DOv2R4AFLSEh",
+      "label": "aa",
+      "type": "checkbox",
+      "value": 1.5
+    },
+    {
+      "id": "YbEnpc7eg24h",
+      "label": "qqq",
       "type": "checkbox",
       "value": 2
     }

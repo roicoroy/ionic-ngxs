@@ -29,6 +29,7 @@ export class PointsService {
         return await this.storage.create();
     }
     fetchPoints(){
+        console.log('fetch');
         return this.http.get<Point[]>(`${this.baseUrl}/points`);
     }
     deletePoint(id: number) {

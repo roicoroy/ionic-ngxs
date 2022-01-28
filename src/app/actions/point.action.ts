@@ -21,9 +21,9 @@ export namespace PointActions {
         constructor(public id: number) {
         }
     }
-    // export class SetSelected {
-    //     static readonly type = '[Point] Set';
-    //     constructor(public payload: Point[]) {
-    //     }
-    // }
+    export class SetSelected {
+        static readonly type = '[Point] Set';
+        constructor(public payload: Point[]) {
+        }
+    }
 }

@@ -1,0 +1,63 @@
+.item-native {
+  background-color: red !important;
+  color: orange !important;
+}
+
+ion-list-header {
+  margin-top: -5% !important;
+}
+ion-item {
+  --ion-background-color: transparent;
+  .points-list {
+    margin-bottom: -10% !important;
+    font-size: 11px;
+  }
+}
+.container {
+  margin-top: 5%;
+}
+ion-row.waiters-row {
+  .inline-calendar-card {
+    width: 100%;
+  }
+}
+ion-row.date-row {
+  .inline-calendar-card {
+    width: 100%;
+  }
+}
+ion-card-content {
+  ion-text.start {
+    font-size: 10px;
+  }
+}
+.delete-button {
+  float: right;
+  position: relative;
+  z-index: 9;
+  ion-button {
+  }
+}
+ion-footer,
+.select-table-footer {
+  ion-buttons {
+    display: flex;
+    justify-content: space-around;
+    ion-button {
+      width: 100%;
+    }
+  }
+}
+ion-toolbar,
+.select-table-footer {
+  ion-buttons {
+    display: flex;
+    justify-content: space-around;
+    ion-button {
+      width: 100%;
+    }
+  }
+}
+ion-slides{
+  margin-bottom: 50px;
+}

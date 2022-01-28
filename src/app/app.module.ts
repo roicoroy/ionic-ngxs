@@ -18,6 +18,7 @@ import { IonicSelectableModule } from 'ionic-selectable';
 import { Drivers } from '@ionic/storage';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { PointsState } from './states/point.state';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { PointsState } from './states/point.state';
       // eslint-disable-next-line no-underscore-dangle
       driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB]
     }),
+    BrowserAnimationsModule,
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
