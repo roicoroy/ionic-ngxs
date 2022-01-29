@@ -17,6 +17,8 @@ import { WaitersService } from '../services/waiters.service';
 import { WaiterState, WAITERS_LIST_KEY } from '../states/waiter.state';
 import { Select, Store } from '@ngxs/store';
 import { WaiterActions } from '../actions/waiter.action';
+import { Point } from '../models/point.type';
+import { PointsState } from '../states/point.state';
 export const LOCAL_WAITERS = 'localWaiters';
 export const SELECTED_WAITER = 'selectedWaiter';
 @Component({
@@ -43,6 +45,8 @@ export const SELECTED_WAITER = 'selectedWaiter';
 })
 export class TestArrayPage implements OnInit {
   @Select(WaiterState.getWaiterList) waitersList: Observable<Waiter[]>;
+  @Select(PointsState.getPointsList) pointsList: Observable<Point[]>;
+
   waitersListForm: FormGroup;
   waiter: FormControl;
   constructor(

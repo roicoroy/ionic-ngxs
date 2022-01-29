@@ -24,11 +24,11 @@ export class PointsService {
         private ionStorageService: IonStorageService,
         private http: HttpClient
     ) {
-        this.baseUrl = environment.API_URL;
+        // this.baseUrl = environment.API_URL;
     }
-    async init() {
-        return await this.storage.create();
-    }
+    // async init() {
+    //     return await this.storage.create();
+    // }
 
     // Read
     getItems(): Promise<Point[]> {

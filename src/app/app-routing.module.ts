@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'test-array',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'test-array',
     loadChildren: () => import('./test-array/test-array.module').then(m => m.TestArrayPageModule)
   },
+  {
+    path: 'result',
+    loadChildren: () => import('./calculator-ngxs/result/result.module').then( m => m.ResultPageModule)
+  }
 ];
 
 @NgModule({

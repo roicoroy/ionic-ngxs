@@ -60,7 +60,7 @@ export class PointsState {
     updatePoint(ctx: StateContext<PointsStateModel>, { payload, id }: PointActions.Update) {
         console.log(payload, id);
         return this.pointsService.updateItem(payload).then((result) => {
-            console.log(result);
+            // console.log(result);
             const state = ctx.getState();
             const pointList = [...state.points];
             const todoIndex = pointList.findIndex((item) => item.id === id);

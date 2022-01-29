@@ -4,7 +4,7 @@ import { IWaiter } from './waiters.interface';
 
 export class Waiter implements IWaiter {
     id?: number;
-    name: string;
+    name?: string;
     points?: IPoint[];
     hours?: number;
     tipsShare?: number;

@@ -8,6 +8,7 @@ import { Waiter } from '../models/waiters.type';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError, tap } from 'rxjs/operators';
+
 export const WAITERS_LIST_KEY = 'waitersList';
 @Injectable({
   providedIn: 'root'

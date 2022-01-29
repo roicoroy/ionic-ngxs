@@ -1,22 +1,27 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { AlertController, IonContent, IonSlides, NavController, PickerController, Platform } from '@ionic/angular';
-import { IonStorageService } from '../services';
+import { EntriesService, IonStorageService } from '../services';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { PointsService } from '../services/points.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 // import { LOCAL_WAITERS } from '../test-array/test-array.page';
 import { Storage } from '@ionic/storage-angular';
 import { Waiter } from '../models/waiters.type';
-import { WAITERS_LIST_KEY } from '../states/waiter.state';
+import { WaiterState, WAITERS_LIST_KEY } from '../states/waiter.state';
 import { Point } from '../models/point.type';
 import { Select, Store } from '@ngxs/store';
 import { PointsState } from '../states/point.state';
 import { PointActions } from '../actions/point.action';
+import { WaiterActions } from '../actions/waiter.action';
+import { NavigationExtras } from '@angular/router';
+import * as moment from 'moment';
+import * as nanoid from 'nanoid';
 export const LOCAL_WAITERS = 'localWaiters';
+export const TEAM_ENTRY = 'teamEntry';
 
 @Component({
   selector: 'app-calculator',
@@ -42,17 +47,22 @@ export const LOCAL_WAITERS = 'localWaiters';
 })
 export class CalculatorNgxsPage implements OnInit {
   @Select(PointsState.getPointsList) pointsList: Observable<Point[]>;
+  @Select(WaiterState.getWaiterList) waitersList: Observable<Waiter[]>;
 
   @ViewChild(IonContent, { static: true }) ionContent: IonContent;
   @ViewChild(IonSlides, { static: false }) ionSlides: IonSlides;
   @ViewChild('waitersFormRef', { static: false }) waitersFormRef: NgForm;
-
+  @ViewChild('dateFormRef', { static: false }) dateFormRef: NgForm;
+  @ViewChild('tipsFormRef', { static: false }) tipsFormRef: NgForm;
   toggle = true;
   group = null;
   selected = [];
   selectedHours = null;
 
-  public date: any = new Date().toISOString();
+  public dateForm: FormGroup;
+  // public date: any = new Date().toISOString();
+  date = new FormControl(new Date());
+  // serializedDate = new FormControl(new Date().toISOString());
   public slidesOpts = {
     allowTouchMove: false,
     autoHeight: true,
@@ -71,233 +81,107 @@ export class CalculatorNgxsPage implements OnInit {
   pointsFromWaiter: Point[];
   selectedWaiter: Waiter;
   //
+  public tipsForm: FormGroup;
+  tipsControl: FormControl;
+  //
   waiterForm: FormGroup;
   waiterNameControl: FormControl;
   waitersArrayFrom: FormArray;
   public waitersListForm: FormGroup;
-  get waitersListArray() {
-    return this.waitersListForm.get('waitersList') as FormArray;
-  }
-  pointsModel;
-  //validator
+  //validatorS
   isNameValidFormSubmitted: boolean | null = null;
   isPointValidFormSubmitted: boolean | null = null;
   isHoursValidFormSubmitted: boolean | null = null;
-  public waitersListDataSubject: BehaviorSubject<Waiter[]> = new BehaviorSubject<Waiter[]>([]);
-  backupWaitersData = [];
-  deleted = [];
+  isTipsValidFormSubmitted: boolean | null = null;
+
+  localData = [];
   constructor(
     private formBuilder: FormBuilder,
     private navCtrl: NavController,
-    private sanitizer: DomSanitizer,
     public alertController: AlertController,
     private pickerController: PickerController,
-    private platform: Platform,
     private store: Store,
-    // public waiterService: WaitersService,
-    // private pointsService: PointsService,
-    public ionStorageService: IonStorageService,
     private storage: Storage,
-
-  ) {
-    this.waitersListForm = this.formBuilder.group({
-      waitersList: this.formBuilder.array([
-        this.initWaitersListForm()
-      ])
-    });
+    private entries: EntriesService
+  ) { }
+  get waitersListArray() {
+    return this.waitersListForm.get('waitersList') as FormArray;
+  }
+  waitersListArrayControl(i) {
+    return this.waitersListArray.controls[i].get('waiter') as FormControl;
+  }
+  get dateControl(): AbstractControl {
+    return this.dateForm.get('date');
+  }
+  get paymentNumber(): AbstractControl {
+    return this.tipsForm.get('tips');
   }
   ionViewWillEnter() {
     this.store.dispatch(new PointActions.Get());
+    this.store.dispatch(new WaiterActions.Get());
     this.ionSlides.updateAutoHeight();
-    this.ionStorageService.getKeyAsObservable(WAITERS_LIST_KEY)
-      .subscribe((savedWaiters) => {
-        if (savedWaiters) {
-          this.waitersListData = savedWaiters;
-          this.setDataUpdateSubject(this.waitersListData);
-        } else {
-          // this.waitersListData = this.waiterService.getWaitersList();
-          this.setDataUpdateSubject(this.waitersListData);
-        }
-      });
-    this.pointsList.subscribe((points) => {
-      this.pointsListSelect = points;
-      console.log(points);
-    });
-  }
-  setDataUpdateSubject(data) {
-    this.storage.set(LOCAL_WAITERS, data).then((responseData) => {
-      this.waitersListDataSubject.next(responseData);
-    });
+    this.ionContent.scrollToTop();
   }
   ngOnInit() {
     this.buildSlides();
-  }
-  submitForm() {
-    console.log(this.waitersListForm.value.waitersList);
-    console.log(this.pointsModel);
-  }
-  addWaiterField(): void {
-    this.ionStorageService.getKeyAsObservable(LOCAL_WAITERS).subscribe((localWaiters) => {
-      const waitersListDataIndex = localWaiters.length - 1;
-      if (this.waitersListArray.length <= waitersListDataIndex) {
-        this.waitersListArray.push(this.initWaitersListForm());
-        setTimeout(() => {
-          this.ionSlides.updateAutoHeight();
-          this.ionSlides.update();
-        }, 50);
-      } else {
-        console.error('got engouth waiters in the array :)');
-        this.alertMessage('got engouth waiters in the array :)');
-      }
+    this.waitersList.subscribe((waitersList) => {
+      this.setupForm(waitersList);
     });
-
+    this.pointsList.subscribe((pointsList) => {
+      this.pointsListSelect = pointsList;
+    });
   }
-  initWaitersListForm() {
+  setupForm(waitersListData) {
+    this.dateForm = new FormGroup({
+      date: this.date,
+    });
+    this.waitersListForm = this.formBuilder.group({
+      waitersList: this.formBuilder.array([
+        ...this.createFormArray(waitersListData)
+      ])
+    });
+    this.tipsControl = new FormControl('', [
+      Validators.required,
+    ]);
+    this.tipsForm = new FormGroup({
+      tips: this.tipsControl,
+    });
+  }
+  updateFormDate(value: any) {
+    this.dateForm.get('date').setValue(value);
+  }
+  createField(name): FormGroup {
     return this.formBuilder.group({
-      name: ['', Validators.required],
-      points: [[], Validators.required],
+      name: [name, Validators.required],
+      points: [''],
+      pointsArray: [[], Validators.required],
       hours: ['', Validators.required],
     });
   }
+  createFormArray(waitersListData: Waiter[]): FormGroup[] {
+    const count = waitersListData.length;
+    const arr = [];
+    for (let i = 0; i < count; i++) {
+      arr.push(this.createField(waitersListData[i].name));
+    }
+    return arr;
+  }
   deleteWaiter(i: number) {
     if (this.waitersListArray.length <= 1) {
-      console.error('you need at least 1 waiter in the form array');
       this.alertMessage('you need at least 1 waiter in the form array');
     } else {
       this.waitersListArray.removeAt(i);
-      setTimeout(() => {
-        this.ionSlides.updateAutoHeight();
-        this.ionSlides.update();
-      }, 50);
     }
   }
-  //
   onPointsListChange(event, i) {
-    console.log(event);
     if (this.waitersListArray.controls[i].get('points') !== null || this.waitersListArray.controls[i].get('points') !== undefined) {
       this.waitersListArray.controls[i].get('points').setValue(event.value);
     }
-
     setTimeout(() => {
       this.ionSlides.updateAutoHeight();
       this.ionSlides.update();
     }, 50);
   }
-  togglePoints() {
-    this.selectPointsComponent.toggleItems(this.selectPointsComponent.itemsToConfirm.length ? false : true);
-    // this.confirm();
-  }
-  confirm() {
-    this.selectPointsComponent.confirm();
-    this.selectPointsComponent.close();
-  }
-  confirmWaiters() {
-    this.selectNameComponent.confirm();
-    this.selectNameComponent.close();
-  }
-  //
-  waitersListArrayControl(i) {
-    return this.waitersListArray.controls[i].get('name') as FormControl;
-  }
-  returnWaiter(i) {
-    let waiterToReturn;
-    if (this.waitersListArrayControl(i).value) {
-      waiterToReturn = this.waitersListArrayControl(i).value;
-      this.waitersListData.push(waiterToReturn);
-      this.waitersListDataSubject.next(this.waitersListData);
-      this.deleted.pop();
-      this.waitersListArray.controls[i].get('name').setValue('');
-    } else {
-      this.alertMessage('no waiter to return...');
-    }
-  }
-  async alertMessage(message) {
-    const alert = await this.alertController.create({
-      message: `message:: ${message}`,
-      buttons: ['OK']
-    });
-    alert.present();
-  }
-  waitersListChange(event: any, index) {
-    console.log(event.value);
-
-    const name: Waiter = event.value;
-    const controlValue = this.waitersListArrayControl(index);
-    const arr: Waiter[] = this.waitersListData;
-    console.log(this.deleted);
-
-
-    if (this.waitersListArrayControl(index) !== null || this.waitersListArrayControl(index) !== undefined) {
-      if (controlValue.value.name === event.value.name) {
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i] === name) {
-            const deleted = arr.splice(i, 1);
-            this.deleted.push(...deleted);
-          }
-        }
-        console.log(this.deleted);
-        console.log(arr);
-        this.waitersListDataSubject.next(arr);
-        this.waitersListArrayControl(index).setValue(name);
-      } else {
-        // this.waitersListDataSubject.next(arr);
-        return;
-
-        // this.waitersListArrayControl(index).setValue(name);
-      }
-    }
-    if (this.waitersListArray.controls[index].get('points') !== null || this.waitersListArray.controls[index].get('points') !== undefined) {
-      this.waitersListArray.controls[index].get('points').setValue(event.value.points);
-    }
-    if (this.waitersListArray.controls[index].get('hours') !== null || this.waitersListArray.controls[index].get('hours') !== undefined) {
-      this.waitersListArray.controls[index].get('hours').setValue(event.value.hours);
-    }
-  }
-  onAddNewWaiter(event: any) {
-    // console.log(event);
-    this.waiterNameControl.reset();
-    event.component.showAddItemTemplate();
-  }
-  addOnWaitersList() {
-    const waiter = new Waiter(
-      {
-        // id: this.waiterService.getNewWaiterId(),
-        name: this.waiterNameControl.value,
-      }
-    );
-    // this.waiterService.addNewWaiter(waiter);
-    this.selectNameComponent.hideAddItemTemplate();
-  }
-  onAddWaitersList(event: any) {
-    // console.log(event);
-    this.waiterNameControl.reset();
-    event.component.showAddItemTemplate();
-  }
-  saveOnWaitersList(waiter: Waiter) {
-    waiter.name = this.waiterNameControl.value;
-    this.selectNameComponent.hideAddItemTemplate();
-  }
-  onDeleteWaiter(event: any) {
-    // this.waiterService.deleteWaiter(event.item);
-    event.component.deleteItem(event.item);
-  }
-  resetWaitersListForm() {
-    this.waitersListArray.reset();
-    this.waitersFormRef.reset();
-    this.deleted = [];
-    this.ionStorageService.getKeyAsObservable(LOCAL_WAITERS).subscribe((localWaiters) => {
-      this.waitersListDataSubject.next(localWaiters);
-      this.waitersListData = localWaiters;
-    });
-  }
-  //Select Points
-  // clearSelectedName(i) {
-  //   this.waitersListArray.controls[i].get('name').reset();
-  //   this.waitersListArray.controls[i].get('name').setErrors(null);
-  //   this.waitersListArray.controls[i].get('name').updateValueAndValidity();
-  //   this.selectNameComponent.clear();
-  //   this.isNameValidFormSubmitted = true;
-  // }
   clearSelectedPoints(i) {
     this.waitersListArray.controls[i].get('points').reset();
     this.waitersListArray.controls[i].get('points').setErrors(null);
@@ -306,62 +190,99 @@ export class CalculatorNgxsPage implements OnInit {
     this.isPointValidFormSubmitted = true;
   }
   clearSelectedHour(i) {
-    // const localControl = control as FormControl;
-    // localControl.reset();
     this.waitersListArray.controls[i].get('hours').reset();
     this.waitersListArray.controls[i].get('hours').setErrors(null);
     this.waitersListArray.controls[i].get('hours').updateValueAndValidity();
     this.isHoursValidFormSubmitted = true;
   }
+  //
+  submitForm() {
+    const sumPointsArrayValues = [];
+    this.waitersListArray.controls.forEach((waitersListArray: any) => {
+      waitersListArray.controls.pointsArray.value.forEach(pointsArray => {
+        sumPointsArrayValues.push(pointsArray.value);
+      });
+      const sumPoints = this.sumPointsArray(sumPointsArrayValues);
+      waitersListArray.controls.points.setValue(sumPoints);
+    });
+    this.buildWaiterEntryObject(this.waitersListForm.value.waitersList, this.dateForm.value.date, this.tipsForm.value.tips);
+  }
+  buildWaiterEntryObject(waitersList, date, tips) {
+    const entryid = nanoid(12);
+    const sumXValueArray = [];
+    waitersList.forEach((waiter) => {
+      waiter.xValue = waiter.points + waiter.hours;
+      sumXValueArray.push(waiter.xValue);
+    });
+    const aValue = this.sumPointsArray(sumXValueArray);
+    waitersList.forEach((waiter) => {
+      waiter.yValue = tips / aValue;
+      waiter.tipsShare = waiter.xValue * waiter.yValue;
+    });
+    const teamEntry = {
+      id: entryid,
+      tips,
+      date,
+      waitersList,
+      aValue,
+    };
+    this.entries.addEntry(teamEntry).then(() => {
+      this.navCtrl.navigateForward(['/result']).then(() => {
+      });
+    });
+    // this.storage.set(TEAM_ENTRY, teamEntry).then(() => {
+    // });
+  }
+  sumPointsArray(array) {
+    const sum = array.reduce((a, b) => a + b, 0);
+    return sum;
+  }
   // Slides
   buildSlides() {
-    const slides = ['Waiters List', 'Date', 'Tips', 'Summary'];
+    const slides = ['Tips', 'Date', 'Waiters List'];
     this.currentSlide = slides[0];
     this.slides = slides;
   }
   isNameValid = true;
   async onNextButtonTouched() {
     if (this.currentSlide === 'Date') {
-      console.log('date');
-      this.ionSlides.slideNext();
-      this.ionContent.scrollToTop();
+      if (this.dateForm.invalid) {
+        return;
+      } else {
+        this.ionSlides.slideNext();
+        this.ionContent.scrollToTop();
+      }
     }
     else if (this.currentSlide === 'Tips') {
-      console.log('Tips');
-      this.ionSlides.slideNext();
-      this.ionContent.scrollToTop();
+      this.tipsFormRef.onSubmit(undefined);
+      if (this.tipsForm.invalid) {
+        this.isTipsValidFormSubmitted = true;
+      } else {
+        this.isTipsValidFormSubmitted = false;
+        this.ionSlides.slideNext();
+        this.ionContent.scrollToTop();
+      }
     }
     else if (this.currentSlide === 'Waiters List') {
-      // this.isValidFormSubmitted = false;
-      console.log('submit', this.waitersListForm.value.waitersList);
       this.isNameValidFormSubmitted = false;
       this.isPointValidFormSubmitted = false;
       this.isHoursValidFormSubmitted = false;
       if (this.waitersListForm.invalid) {
+        setTimeout(() => {
+          this.ionSlides.updateAutoHeight();
+          this.ionSlides.update();
+        }, 50);
+      }
+      if (this.waitersListForm.valid) {
         this.isNameValidFormSubmitted = false;
         this.isPointValidFormSubmitted = false;
         this.isHoursValidFormSubmitted = false;
-        console.log('valid');
-        setTimeout(() => {
-          // this.ionSlides.updateAutoHeight();
-          // this.ionSlides.update();
-        }, 50);
-        return;
-      }
-      if (this.waitersListForm.valid) {
-        this.isNameValidFormSubmitted = true;
-        this.isPointValidFormSubmitted = true;
-        this.isHoursValidFormSubmitted = true;
         this.ionSlides.updateAutoHeight();
-        // this.ionSlides.slideNext();
-        // this.ionContent.scrollToTop();
+        this.ionSlides.slideNext();
+        this.ionContent.scrollToTop();
       }
-    }
-    else if (this.currentSlide === 'Summary') {
-      console.log('Summary');
     }
   }
-
   async onSlidesChanged() {
     const index = await this.ionSlides.getActiveIndex();
     this.currentSlide = this.slides[index];
@@ -396,7 +317,6 @@ export class CalculatorNgxsPage implements OnInit {
         {
           text: 'Ok',
           handler: (e) => {
-            console.log(e);
             const hours = e.hours.value;
             const quarters = e.quarters.value;
             const hoursString: any = [`${hours}.${quarters}`];
@@ -407,7 +327,6 @@ export class CalculatorNgxsPage implements OnInit {
             hoursFormArray.controls.hours.setErrors(null);
             hoursFormArray.updateValueAndValidity();
             this.selectedHours = hoursFormArray.controls.hours.value;
-            // console.log(this.selectedHours);
           },
         }
       ],
@@ -495,4 +414,31 @@ export class CalculatorNgxsPage implements OnInit {
     const picker = await this.pickerController.create(settings);
     picker.present();
   }
+  async alertMessage(message) {
+    const alert = await this.alertController.create({
+      message: `message:: ${message}`,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+}
+
+export class Team {
+  id?: any;
+  tipsMade?: number;
+  date?: any;
+  aValue?: number;
+  waitersList?: Waiter[];
+}
+
+export class TeamEntry {
+  teamEntry: Team[];
+}
+
+export class FinalWaiter extends Waiter {
+  name?: any = '';
+  xValue?: any;
+  yValue?: any;
+  tipsShare?: number;
+  pointsArray?: [];
 }

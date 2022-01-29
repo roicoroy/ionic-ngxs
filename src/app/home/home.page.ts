@@ -41,6 +41,6 @@ export class HomePage implements OnInit {
     });
   }
   deleteAll(){
-    this.entr
+    this.entries.deleteAll();
   }
 }
