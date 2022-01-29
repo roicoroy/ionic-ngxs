@@ -1,23 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { TeamEntry, TEAM_ENTRY } from '../calculator-ngxs/calculator-ngxs.page';
+import { EntriesService, IonStorageService } from '../services';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
-
+export class HomePage implements OnInit {
+  public teamEntryArray: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  sub: Subscription;
+  data;
   constructor(
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private entries: EntriesService,
+    private ionStorageService: IonStorageService,
   ) { }
-    calculator(){
-      this.navCtrl.navigateBack('test-array');
-    }
-    // calculator(){
-    //   this.navCtrl.navigateBack('calculator-ngxs');
-    // }
-    settings(){
-      this.navCtrl.navigateBack('settings-ngxs');
-    }
+  ngOnInit() {
+    this.sub = this.ionStorageService.getKeyAsObservable(TEAM_ENTRY).subscribe((entries) => {
+      this.data = entries;
+      this.teamEntryArray.next(entries);
+      console.log(entries);
+    });
+  }
+  // calculator(){
+  // //   this.navCtrl.navigateBack('test-array');
+  // // }
+  calculator() {
+    this.navCtrl.navigateBack('calculator-ngxs');
+  }
+  settings() {
+    this.navCtrl.navigateBack('settings-ngxs');
+  }
+  deleteEntry(id) {
+    this.entries.deleteEntry(id).then((result) => {
+      console.log(result);
+      this.teamEntryArray.next(result);
+    });
+  }
+  deleteAll(){
+    this.entr
+  }
 }
