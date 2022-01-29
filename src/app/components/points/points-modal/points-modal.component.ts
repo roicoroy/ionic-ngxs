@@ -82,12 +82,12 @@ export class PointsModalComponent implements OnInit {
     }
   }
   saveEditedPoint() {
-    const editPoint = new Point({
+    const editPoint = {
       id: this.pointId,
       label: this.createPointsForm.value.label,
       value: this.numberize(this.valueField.value),
       type: 'checkbox'
-    });
+    };
     console.log(editPoint);
     if (this.createPointsForm.valid) {
       this.modalController.dismiss(editPoint);

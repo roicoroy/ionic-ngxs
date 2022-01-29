@@ -17,14 +17,12 @@
 </ion-card>
 
 <ion-grid>
-
-  {{ pointsList | async | json }}
+  <!-- {{ pointsList | async | json }} -->
   <ion-row *ngFor="let p of pointsList | async">
     <ion-col size="12">
       <ion-item>
-        <!-- <ion-label (click)="editPoint(p)" >{{ p.label  }}</ion-label>
-        <ion-badge (click)="editPoint(p)" slot="end">{{ p.value }}</ion-badge> -->
-        {{ p | json }}
+        <ion-label (click)="editPoint(p)" >{{ p.label  }}</ion-label>
+        <ion-badge (click)="editPoint(p)" slot="end">{{ p.value }}</ion-badge>
         <ion-buttons slot="end">
           <ion-button (click)="delete(p.id)" expand="block" fill="clear" shape="round">
             <ion-icon name="close" color='danger' (click)="delete(p.id)"></ion-icon>

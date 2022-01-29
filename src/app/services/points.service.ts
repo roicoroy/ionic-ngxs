@@ -6,6 +6,7 @@ import { Point } from '../models/point.type';
 import * as nanoid from 'nanoid';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { of } from 'rxjs';
 export const POINTS_LIST_KEY = 'pointsList';
 
 @Injectable({
@@ -28,18 +29,58 @@ export class PointsService {
     async init() {
         return await this.storage.create();
     }
-    fetchPoints(){
-        console.log('fetch');
-        return this.http.get<Point[]>(`${this.baseUrl}/points`);
+
+    // Read
+    getItems(): Promise<Point[]> {
+        return this.storage.get(POINTS_LIST_KEY);
     }
-    deletePoint(id: number) {
-        return this.http.delete(`${this.baseUrl}/points/${id}`);
+    // Create
+    addItem(item: Point): Promise<Point[]> {
+        item.id = nanoid(12);
+        console.log(item);
+        return this.storage.get(POINTS_LIST_KEY)
+            .then((formItems: Point[]) => {
+                console.log(formItems);
+                if (formItems) {
+                    formItems.push(item);
+                    return this.storage.set(POINTS_LIST_KEY, formItems);
+                } else {
+                    return this.storage.set(POINTS_LIST_KEY, [item]);
+                }
+            });
     }
-    addPoint(payload: Point) {
-        payload.id = nanoid(12);
-        return this.http.post<Point>(`${this.baseUrl}/points`, payload);
+    // Update
+    updateItem(item: Point): Promise<any> {
+        return this.storage.get(POINTS_LIST_KEY)
+            .then((formItems: Point[]) => {
+                if (!formItems || formItems.length === 0) {
+                    return null;
+                }
+                const newFormItem: Point[] = [];
+                for (const form of formItems) {
+                    if (form.id === item.id) {
+                        newFormItem.push(item);
+                    } else {
+                        newFormItem.push(form);
+                    }
+                }
+                return this.storage.set(POINTS_LIST_KEY, newFormItem);
+            });
     }
-    updatePoint(payload: Point, id: number) {
-        return this.http.put<Point>(`${this.baseUrl}/points/${id}`, payload);
+    // Delete
+    deleteItem(id: number): Promise<any> {
+        return this.storage.get(POINTS_LIST_KEY)
+            .then((formItems: Point[]) => {
+                if (!formItems || formItems.length === 0) {
+                    return null;
+                }
+                const formsToKeep: Point[] = [];
+                for (const form of formItems) {
+                    if (form.id !== id) {
+                        formsToKeep.push(form);
+                    }
+                }
+                return this.storage.set(POINTS_LIST_KEY, formsToKeep);
+            });
     }
 }
