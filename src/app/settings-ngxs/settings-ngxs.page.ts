@@ -16,13 +16,11 @@ import { POINTS_LIST_KEY } from '../services';
 })
 export class SettingsNgxsPage implements OnInit {
    @ViewChild('slider') slider: IonSlides;
-   @Select(PointsState.getPointsList) pointsList: Observable<Point[]>;
    page;
    slideOpts = {
    };
    constructor(
       private navCtrl: NavController,
-      private storage: Storage,
    ) { }
    ngOnInit() {
    }

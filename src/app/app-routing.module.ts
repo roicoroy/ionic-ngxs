@@ -4,20 +4,24 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'test-array',
     pathMatch: 'full'
   },
   {
     path: 'calculator-ngxs',
-    loadChildren: () => import('./calculator-ngxs/calculator-ngxs.module').then( m => m.CalculatorNgxsPageModule)
+    loadChildren: () => import('./calculator-ngxs/calculator-ngxs.module').then(m => m.CalculatorNgxsPageModule)
   },
   {
     path: 'settings-ngxs',
-    loadChildren: () => import('./settings-ngxs/settings-ngxs.module').then( m => m.SettingsNgxsPageModule)
+    loadChildren: () => import('./settings-ngxs/settings-ngxs.module').then(m => m.SettingsNgxsPageModule)
+  },
+  {
+    path: 'test-array',
+    loadChildren: () => import('./test-array/test-array.module').then(m => m.TestArrayPageModule)
   },
 ];
 

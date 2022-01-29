@@ -7,12 +7,15 @@ import { AlertController, IonContent, IonSlides, NavController, PickerController
 import { IonStorageService } from '../services';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { PointsService } from '../services/points.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 // import { LOCAL_WAITERS } from '../test-array/test-array.page';
 import { Storage } from '@ionic/storage-angular';
 import { Waiter } from '../models/waiters.type';
 import { WAITERS_LIST_KEY } from '../states/waiter.state';
 import { Point } from '../models/point.type';
+import { Select, Store } from '@ngxs/store';
+import { PointsState } from '../states/point.state';
+import { PointActions } from '../actions/point.action';
 export const LOCAL_WAITERS = 'localWaiters';
 
 @Component({
@@ -38,6 +41,8 @@ export const LOCAL_WAITERS = 'localWaiters';
   ]
 })
 export class CalculatorNgxsPage implements OnInit {
+  @Select(PointsState.getPointsList) pointsList: Observable<Point[]>;
+
   @ViewChild(IonContent, { static: true }) ionContent: IonContent;
   @ViewChild(IonSlides, { static: false }) ionSlides: IonSlides;
   @ViewChild('waitersFormRef', { static: false }) waitersFormRef: NgForm;
@@ -62,7 +67,7 @@ export class CalculatorNgxsPage implements OnInit {
   @ViewChild('selectNameComponent') selectNameComponent: IonicSelectableComponent;
   @ViewChild('selectPointsComponent') selectPointsComponent: IonicSelectableComponent;
   waitersListData: any;
-  pointsList: Point[];
+  pointsListSelect: Point[];
   pointsFromWaiter: Point[];
   selectedWaiter: Waiter;
   //
@@ -88,6 +93,7 @@ export class CalculatorNgxsPage implements OnInit {
     public alertController: AlertController,
     private pickerController: PickerController,
     private platform: Platform,
+    private store: Store,
     // public waiterService: WaitersService,
     // private pointsService: PointsService,
     public ionStorageService: IonStorageService,
@@ -101,6 +107,7 @@ export class CalculatorNgxsPage implements OnInit {
     });
   }
   ionViewWillEnter() {
+    this.store.dispatch(new PointActions.Get());
     this.ionSlides.updateAutoHeight();
     this.ionStorageService.getKeyAsObservable(WAITERS_LIST_KEY)
       .subscribe((savedWaiters) => {
@@ -112,6 +119,10 @@ export class CalculatorNgxsPage implements OnInit {
           this.setDataUpdateSubject(this.waitersListData);
         }
       });
+    this.pointsList.subscribe((points) => {
+      this.pointsListSelect = points;
+      console.log(points);
+    });
   }
   setDataUpdateSubject(data) {
     this.storage.set(LOCAL_WAITERS, data).then((responseData) => {

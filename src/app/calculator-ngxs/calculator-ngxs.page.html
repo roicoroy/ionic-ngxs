@@ -97,7 +97,6 @@
                             </ion-text>
                           </ion-item>
                         </ion-col>
-                        
 
                         <ion-col size="12">
                           <ion-list-header>
@@ -106,12 +105,12 @@
                             </ion-button>
                           </ion-list-header>
                           <ion-item>
-                            <ionic-selectable #selectPointsComponent [items]="pointsList" closeButtonText="Close"
+                            <ionic-selectable #selectPointsComponent [items]="pointsListSelect" closeButtonText="Close"
                               closeButtonSlot="end" itemValueField="id" itemTextField="label" [isMultiple]="true"
                               confirmButtonText="OK" (onChange)='onPointsListChange($event, i)'>
-                              <!-- <ng-template ionicSelectableIconTemplate>
+                              <ng-template ionicSelectableIconTemplate>
                                 <ion-icon name="compass"></ion-icon>
-                              </ng-template> -->
+                              </ng-template>
                               <ng-template ionicSelectableItemTemplate let-point="item"
                                 let-isPortSelected="isItemSelected">
                                 {{ point.label }} ({{ point.value }})
@@ -157,15 +156,6 @@
                               </ng-template>
                             </ionic-selectable>
                           </ion-item>
-
-                          <!-- <ion-item *ngFor='let point of waitersListArray.controls[i].get("points").value'>
-                            <ion-label>
-                              {{ point.label }}
-                            </ion-label>
-                            <ion-note slot='end'>
-                              {{ point.value }}
-                            </ion-note>
-                          </ion-item> -->
                           <ion-item
                             *ngIf="waitersListArray.controls[i].get('points')?.errors?.required && isPointValidFormSubmitted !== null && !isPointValidFormSubmitted">
                             <ion-text color="danger">
@@ -173,6 +163,7 @@
                             </ion-text>
                           </ion-item>
                         </ion-col>
+
                         <ion-col size="12">
                           <ion-list-header>
                             <ion-label>Hours</ion-label>
@@ -205,7 +196,6 @@
               </div>
             </form>
           </div>
-
 
           <div *ngIf="slide === 'Date'">
             <ion-row class='date-row'>

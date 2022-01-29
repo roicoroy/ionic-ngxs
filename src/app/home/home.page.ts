@@ -12,8 +12,11 @@ export class HomePage {
     private navCtrl: NavController
   ) { }
     calculator(){
-      this.navCtrl.navigateBack('calculator-ngxs');
+      this.navCtrl.navigateBack('test-array');
     }
+    // calculator(){
+    //   this.navCtrl.navigateBack('calculator-ngxs');
+    // }
     settings(){
       this.navCtrl.navigateBack('settings-ngxs');
     }
