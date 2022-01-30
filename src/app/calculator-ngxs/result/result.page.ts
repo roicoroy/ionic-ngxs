@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { IonStorageService } from 'src/app/services';
@@ -16,11 +17,13 @@ export class ResultPage implements OnInit {
     // private storage: Storage,
     private navCtrl: NavController,
     private ionStorageService: IonStorageService,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
-    this.sub = this.ionStorageService.getKeyAsObservable(TEAM_ENTRY).subscribe((entries) => {
-      this.data = entries;
+    this.route.queryParams.subscribe(params => {
+      this.data = JSON.parse(params.teamEntry);
+      // this.data = params.teamEntry;
       console.log(this.data);
     });
   }

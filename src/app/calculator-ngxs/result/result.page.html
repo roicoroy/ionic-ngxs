@@ -4,12 +4,29 @@
       <ion-title size="large">home</ion-title>
     </ion-toolbar>
   </ion-header>
-
   <ion-grid>
     <ion-row>
-      <ion-col size="12">
-        {{ data | json }}
-      </ion-col>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>{{ data.date | date }}</ion-card-subtitle>
+          <ion-card-title>£ {{ data.tips }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content *ngFor='let w of data.waitersList'>
+          <ion-list>
+            <ion-item ines='none'>
+              <ion-label slot='start'>{{ w.name }}</ion-label>
+              <ion-text color='warning' slot='start'> {{ w.hours }}h </ion-text>
+              <ion-text slot='end'>£ {{ w.tipsShare }} share</ion-text>
+            </ion-item>
+            <ion-item lines='none' *ngFor='let p of w.pointsArray' class='ion-margin'>
+              <ion-label color="primary">{{ p.label }}</ion-label>
+              <ion-text color="primary">
+                {{ p.value }}
+              </ion-text>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
     </ion-row>
   </ion-grid>
 </ion-content>

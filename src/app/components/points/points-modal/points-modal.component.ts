@@ -34,7 +34,6 @@ export class PointsModalComponent implements OnInit {
   isEdit = null;
   constructor(
     public modalController: ModalController,
-    // private pointsService: PointsService,
   ) {
   }
   get labelFormControl() {
@@ -88,7 +87,6 @@ export class PointsModalComponent implements OnInit {
       value: this.numberize(this.valueField.value),
       type: 'checkbox'
     };
-    console.log(editPoint);
     if (this.createPointsForm.valid) {
       this.modalController.dismiss(editPoint);
     }

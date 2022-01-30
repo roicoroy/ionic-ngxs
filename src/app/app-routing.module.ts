@@ -26,7 +26,11 @@ const routes: Routes = [
   {
     path: 'result',
     loadChildren: () => import('./calculator-ngxs/result/result.module').then( m => m.ResultPageModule)
-  }
+  },
+  // {
+  //   path: 'waiters',
+  //   loadChildren: () => import('./components/waiters/waiters.module').then( m => m.WaitersPageModule)
+  // }
 ];
 
 @NgModule({

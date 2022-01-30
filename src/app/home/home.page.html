@@ -10,7 +10,7 @@
         </ion-title>
         <ion-buttons slot="end">
             <ion-button (click)="deleteAll()">
-                <ion-icon slot="start" name="settings"></ion-icon>
+                Delete All
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
@@ -25,7 +25,7 @@
     <ion-grid fixed>
         <ion-row>
             <ion-col>
-                <ion-item *ngFor='let entry of teamEntryArray | async'>
+                <ion-item button *ngFor='let entry of teamEntryArray | async' (click)='resultPage(entry)'>
                     <ion-label>
                         {{ entry.date | date }}
                     </ion-label>

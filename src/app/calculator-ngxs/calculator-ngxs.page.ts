@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { IonicSelectableComponent } from 'ionic-selectable';
-import { AlertController, IonContent, IonSlides, NavController, PickerController, Platform } from '@ionic/angular';
+import { AlertController, IonContent, IonSelect, IonSlides, NavController, PickerController, Platform } from '@ionic/angular';
 import { EntriesService, IonStorageService } from '../services';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { PointsService } from '../services/points.service';
@@ -51,6 +51,7 @@ export class CalculatorNgxsPage implements OnInit {
 
   @ViewChild(IonContent, { static: true }) ionContent: IonContent;
   @ViewChild(IonSlides, { static: false }) ionSlides: IonSlides;
+  @ViewChild(IonSelect, { static: false }) ionSelect: IonSelect;
   @ViewChild('waitersFormRef', { static: false }) waitersFormRef: NgForm;
   @ViewChild('dateFormRef', { static: false }) dateFormRef: NgForm;
   @ViewChild('tipsFormRef', { static: false }) tipsFormRef: NgForm;
@@ -75,7 +76,8 @@ export class CalculatorNgxsPage implements OnInit {
   waitersListSlide = false;
   //
   @ViewChild('selectNameComponent') selectNameComponent: IonicSelectableComponent;
-  @ViewChild('selectPointsComponent') selectPointsComponent: IonicSelectableComponent;
+  @ViewChild('selectPointsComponent', { static: true }) selectPointsComponent: IonicSelectableComponent;
+  // @ViewChild(IonicSelectableComponent, { static: true }) selectPointsComponent: IonicSelectableComponent;
   waitersListData: any;
   pointsListSelect: Point[];
   pointsFromWaiter: Point[];
@@ -154,8 +156,8 @@ export class CalculatorNgxsPage implements OnInit {
     return this.formBuilder.group({
       name: [name, Validators.required],
       points: [''],
-      pointsArray: [[], Validators.required],
       hours: ['', Validators.required],
+      pointsArray: [[], Validators.required],
     });
   }
   createFormArray(waitersListData: Waiter[]): FormGroup[] {
@@ -174,19 +176,27 @@ export class CalculatorNgxsPage implements OnInit {
     }
   }
   onPointsListChange(event, i) {
-    if (this.waitersListArray.controls[i].get('points') !== null || this.waitersListArray.controls[i].get('points') !== undefined) {
-      this.waitersListArray.controls[i].get('points').setValue(event.value);
+    if (this.waitersListArray.controls[i].get('pointsArray') !== null || this.waitersListArray.controls[i].get('points') !== undefined) {
+      this.waitersListArray.controls[i].get('pointsArray').setValue(event.value);
     }
     setTimeout(() => {
       this.ionSlides.updateAutoHeight();
       this.ionSlides.update();
     }, 50);
   }
+  togglePoints() {
+    this.selectPointsComponent.toggleItems(this.selectPointsComponent.itemsToConfirm.length ? false : true);
+    // this.confirm();
+  }
+  confirm() {
+    this.selectPointsComponent.confirm();
+    this.selectPointsComponent.close(); //.catch(()=>{});
+  }
   clearSelectedPoints(i) {
-    this.waitersListArray.controls[i].get('points').reset();
-    this.waitersListArray.controls[i].get('points').setErrors(null);
-    this.waitersListArray.controls[i].get('points').updateValueAndValidity();
-    this.selectPointsComponent.clear();
+    this.waitersListArray.controls[i].get('pointsArray').reset();
+    this.waitersListArray.controls[i].get('pointsArray').setErrors(null);
+    this.waitersListArray.controls[i].get('pointsArray').updateValueAndValidity();
+    // this.selectPointsComponent.clear();
     this.isPointValidFormSubmitted = true;
   }
   clearSelectedHour(i) {
@@ -226,202 +236,208 @@ export class CalculatorNgxsPage implements OnInit {
       waitersList,
       aValue,
     };
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        teamEntry: JSON.stringify(teamEntry),
+      }
+    };
     this.entries.addEntry(teamEntry).then(() => {
-      this.navCtrl.navigateForward(['/result']).then(() => {
+      this.navCtrl.navigateForward(['/result'], navigationExtras).then(() => {
       });
     });
-    // this.storage.set(TEAM_ENTRY, teamEntry).then(() => {
-    // });
-  }
+
+    }
   sumPointsArray(array) {
-    const sum = array.reduce((a, b) => a + b, 0);
-    return sum;
-  }
+      const sum = array.reduce((a, b) => a + b, 0);
+      return sum;
+    }
   // Slides
   buildSlides() {
-    const slides = ['Tips', 'Date', 'Waiters List'];
-    this.currentSlide = slides[0];
-    this.slides = slides;
-  }
-  isNameValid = true;
+      const slides = ['Waiters List', 'Tips', 'Date',];
+      this.currentSlide = slides[0];
+      this.slides = slides;
+    }
   async onNextButtonTouched() {
-    if (this.currentSlide === 'Date') {
-      if (this.dateForm.invalid) {
-        return;
-      } else {
-        this.ionSlides.slideNext();
-        this.ionContent.scrollToTop();
+      if (this.currentSlide === 'Date') {
+        if (this.dateForm.invalid) {
+          return;
+        } else {
+          this.ionSlides.slideNext();
+          this.ionContent.scrollToTop();
+        }
       }
-    }
-    else if (this.currentSlide === 'Tips') {
-      this.tipsFormRef.onSubmit(undefined);
-      if (this.tipsForm.invalid) {
-        this.isTipsValidFormSubmitted = true;
-      } else {
-        this.isTipsValidFormSubmitted = false;
-        this.ionSlides.slideNext();
-        this.ionContent.scrollToTop();
+      else if (this.currentSlide === 'Tips') {
+        this.tipsFormRef.onSubmit(undefined);
+        if (this.tipsForm.invalid) {
+          this.isTipsValidFormSubmitted = true;
+          return;
+        } else {
+          this.isTipsValidFormSubmitted = false;
+          this.ionSlides.slideNext();
+          this.ionContent.scrollToTop();
+        }
       }
-    }
-    else if (this.currentSlide === 'Waiters List') {
-      this.isNameValidFormSubmitted = false;
-      this.isPointValidFormSubmitted = false;
-      this.isHoursValidFormSubmitted = false;
-      if (this.waitersListForm.invalid) {
-        setTimeout(() => {
-          this.ionSlides.updateAutoHeight();
-          this.ionSlides.update();
-        }, 50);
-      }
-      if (this.waitersListForm.valid) {
+      else if (this.currentSlide === 'Waiters List') {
         this.isNameValidFormSubmitted = false;
         this.isPointValidFormSubmitted = false;
         this.isHoursValidFormSubmitted = false;
-        this.ionSlides.updateAutoHeight();
-        this.ionSlides.slideNext();
-        this.ionContent.scrollToTop();
+        if (this.waitersListForm.invalid) {
+          // this.isHoursValidFormSubmitted = true;
+          setTimeout(() => {
+            this.ionSlides.updateAutoHeight();
+            this.ionSlides.update();
+          }, 50);
+          return;
+        }
+        if (this.waitersListForm.valid) {
+          this.isNameValidFormSubmitted = false;
+          this.isPointValidFormSubmitted = false;
+          this.isHoursValidFormSubmitted = false;
+          this.ionSlides.updateAutoHeight();
+          this.ionSlides.slideNext();
+          this.ionContent.scrollToTop();
+        }
       }
     }
-  }
   async onSlidesChanged() {
-    const index = await this.ionSlides.getActiveIndex();
-    this.currentSlide = this.slides[index];
-    this.isBeginning = await this.ionSlides.isBeginning();
-    this.isEnd = await this.ionSlides.isEnd();
-    this.ionSlides.updateAutoHeight();
-  }
-  onSlidesDidChange() {
-    this.ionContent.scrollToTop();
-  }
-  onBackButtonTouched() {
-    this.ionSlides.slidePrev();
-    this.ionContent.scrollToTop();
-  }
-  home() {
-    this.navCtrl.navigateRoot('/home', {
-      animated: true,
-      animationDirection: 'back',
-    });
-  }
+      const index = await this.ionSlides.getActiveIndex();
+      this.currentSlide = this.slides[index];
+      this.isBeginning = await this.ionSlides.isBeginning();
+      this.isEnd = await this.ionSlides.isEnd();
+      this.ionSlides.updateAutoHeight();
+    }
+    onSlidesDidChange() {
+      this.ionContent.scrollToTop();
+    }
+    onBackButtonTouched() {
+      this.ionSlides.slidePrev();
+      this.ionContent.scrollToTop();
+    }
+    home() {
+      this.navCtrl.navigateRoot('/home', {
+        animated: true,
+        animationDirection: 'back',
+      });
+    }
   async showPicker(i) {
-    const settings = {
-      cssClass: 'pickerClassName',
-      buttons: [
-        {
-          text: 'Reset',
-          role: 'cancel',
-          handler: (e) => {
-            this.selectedHours = null;
-          }
-        },
-        {
-          text: 'Ok',
-          handler: (e) => {
-            const hours = e.hours.value;
-            const quarters = e.quarters.value;
-            const hoursString: any = [`${hours}.${quarters}`];
-            const hoursNumber: number = parseFloat(hoursString);
-
-            const hoursFormArray: any = this.waitersListArray.controls[i];
-            hoursFormArray.controls.hours.setValue(hoursNumber);
-            hoursFormArray.controls.hours.setErrors(null);
-            hoursFormArray.updateValueAndValidity();
-            this.selectedHours = hoursFormArray.controls.hours.value;
+      const settings = {
+        cssClass: 'pickerClassName',
+        buttons: [
+          {
+            text: 'Reset',
+            role: 'cancel',
+            handler: (e) => {
+              this.selectedHours = null;
+            }
           },
-        }
-      ],
-      columns: [
-        {
-          name: 'hours',
-          options: [
-            {
-              text: '1',
-              value: 1
+          {
+            text: 'Ok',
+            handler: (e) => {
+              const hours = e.hours.value;
+              const quarters = e.quarters.value;
+              const hoursString: any = [`${hours}.${quarters}`];
+              const hoursNumber: number = parseFloat(hoursString);
+
+              const hoursFormArray: any = this.waitersListArray.controls[i];
+              hoursFormArray.controls.hours.setValue(hoursNumber);
+              hoursFormArray.controls.hours.setErrors(null);
+              hoursFormArray.updateValueAndValidity();
+              this.selectedHours = hoursFormArray.controls.hours.value;
             },
-            {
-              text: '2',
-              value: 2
-            },
-            {
-              text: '3',
-              value: 3
-            },
-            {
-              text: '4',
-              value: 4
-            },
-            {
-              text: '5',
-              value: 5
-            },
-            {
-              text: '6',
-              value: 6
-            },
-            {
-              text: '7',
-              value: 7
-            },
-            {
-              text: '8',
-              value: 8
-            },
-            {
-              text: '9',
-              value: 9
-            },
-            {
-              text: '10',
-              value: 10
-            },
-            {
-              text: '11',
-              value: 11
-            },
-            {
-              text: '12',
-              value: 12
-            },
-            {
-              text: '13',
-              value: 13
-            },
-          ]
-        },
-        {
-          name: 'quarters',
-          options: [
-            {
-              text: '00',
-              value: 0
-            },
-            {
-              text: '25',
-              value: 25
-            },
-            {
-              text: '50',
-              value: 50
-            },
-            {
-              text: '75',
-              value: 75
-            },
-          ]
-        }
-      ],
-    };
-    const picker = await this.pickerController.create(settings);
-    picker.present();
-  }
+          }
+        ],
+        columns: [
+          {
+            name: 'hours',
+            options: [
+              {
+                text: '1',
+                value: 1
+              },
+              {
+                text: '2',
+                value: 2
+              },
+              {
+                text: '3',
+                value: 3
+              },
+              {
+                text: '4',
+                value: 4
+              },
+              {
+                text: '5',
+                value: 5
+              },
+              {
+                text: '6',
+                value: 6
+              },
+              {
+                text: '7',
+                value: 7
+              },
+              {
+                text: '8',
+                value: 8
+              },
+              {
+                text: '9',
+                value: 9
+              },
+              {
+                text: '10',
+                value: 10
+              },
+              {
+                text: '11',
+                value: 11
+              },
+              {
+                text: '12',
+                value: 12
+              },
+              {
+                text: '13',
+                value: 13
+              },
+            ]
+          },
+          {
+            name: 'quarters',
+            options: [
+              {
+                text: '00',
+                value: 0
+              },
+              {
+                text: '25',
+                value: 25
+              },
+              {
+                text: '50',
+                value: 50
+              },
+              {
+                text: '75',
+                value: 75
+              },
+            ]
+          }
+        ],
+      };
+      const picker = await this.pickerController.create(settings);
+      picker.present();
+    }
   async alertMessage(message) {
-    const alert = await this.alertController.create({
-      message: `message:: ${message}`,
-      buttons: ['OK']
-    });
-    alert.present();
+      const alert = await this.alertController.create({
+        message: `message:: ${message}`,
+        buttons: ['OK']
+      });
+      alert.present();
+    }
   }
-}
 
 export class Team {
   id?: any;

@@ -64,12 +64,13 @@
                           </ion-item>
                         </ion-col>
                         <ion-col size="6">
-                          <ion-list-header>
-                            <ion-label>Hours</ion-label>
-                            <ion-button color='dark' fill='outline' shape="round" (click)='clearSelectedHour(i)'>
-                              Clear
-                            </ion-button>
-                          </ion-list-header>
+                          <ion-item lines='none'>
+                            <ion-buttons slot="end">
+                              <ion-button (click)='clearSelectedHour(i)'>
+                                <ion-icon slot="start" name="close"></ion-icon>
+                              </ion-button>
+                            </ion-buttons>
+                          </ion-item>
                           <ion-item>
                             <ion-label *ngIf='waitersListArray.controls[i].get("hours").value !== null'> {{
                               waitersListArray.controls[i].get('hours').value }} </ion-label>
@@ -93,51 +94,13 @@
                             </ion-button>
                           </ion-list-header>
                           <ion-item lines='none'>
-                            <ionic-selectable formControlName="pointsArray" #selectPointsComponent [items]="pointsListSelect" itemValueField="value"
-                              itemTextField="label" [isMultiple]="true" confirmButtonText="OK"
-                              (onChange)='onPointsListChange($event,i)'>
-                              <ng-template ionicSelectableIconTemplate>
-                                <ion-item lines='none'>
-                                  <ion-icon name="arrow-down"></ion-icon>
-                                </ion-item>
-                              </ng-template>
-                              <!-- <ng-template ionicSelectableItemTemplate let-point="item"
-                                let-isPortSelected="isItemSelected">
-                                <ion-label>
-                                  {{ point.label }}
-                                </ion-label>
-                                <ion-note slot='end'>
-                                  {{ point.value }}
-                                </ion-note>
-                              </ng-template>
-                              <ng-template ionicSelectableValueTemplate let-points="value">
-                                <ion-item lines="none" class="points-list" *ngFor="let p of points">
-                                  <ion-label>
-                                    {{ p.label }}
-                                  </ion-label>
-                                  <ion-note slot='end'>
-                                    {{ p.value }}
-                                  </ion-note>
-                                </ion-item>
-                              </ng-template> -->
-                              <ng-template ionicSelectableHeaderTemplate>
-                                <ion-header>
-                                  <ion-toolbar color='dark'>
-                                    <ion-buttons>
-                                      <ion-button (click)="selectPointsComponent.close()">
-                                        {{selectPointsComponent.closeButtonText}}
-                                      </ion-button>
-                                    </ion-buttons>
-                                    <ion-title>
-                                      {{selectPointsComponent.label}}
-                                    </ion-title>
-                                  </ion-toolbar>
-                                </ion-header>
-                              </ng-template>
+                            <ionic-selectable #selectPointsComponent [items]="pointsListSelect"
+                              formControlName="pointsArray" itemValueField="label" itemTextField="label"
+                              [isMultiple]="true" confirmButtonText="OK" closeButtonText="Close">
                             </ionic-selectable>
                           </ion-item>
                           <ion-item
-                            *ngIf="waitersListArray.controls[i].get('points')?.errors?.required && isPointValidFormSubmitted !== null && !isPointValidFormSubmitted">
+                            *ngIf="waitersListArray.controls[i].get('pointsArray')?.errors?.required && isPointValidFormSubmitted !== null && !isPointValidFormSubmitted">
                             <ion-text color="danger">
                               Add the points criterias
                             </ion-text>
