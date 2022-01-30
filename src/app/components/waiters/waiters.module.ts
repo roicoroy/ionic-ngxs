@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { WaitersPage } from './waiters.page';
 import { WaiterModalComponent } from './waiters/waiter-modal/waiter-modal.component';
@@ -10,6 +10,7 @@ import { WaiterModalComponent } from './waiters/waiter-modal/waiter-modal.compon
     CommonModule,
     FormsModule,
     IonicModule,
+    ReactiveFormsModule
   ],
   declarations: [
     WaitersPage,

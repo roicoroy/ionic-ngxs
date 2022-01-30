@@ -30,7 +30,7 @@ export class WaitersPage implements OnInit {
     await modal.present();
     const { data } = await modal.onWillDismiss();
     if (data) {
-      console.log(data);
+      this.store.dispatch(new WaiterActions.Add(data));
     }
   }
   async editWaiter(waiter) {
@@ -44,7 +44,7 @@ export class WaitersPage implements OnInit {
     await modal.present();
     const { data } = await modal.onWillDismiss();
     if (data) {
-      console.log(data);
+      this.store.dispatch(new WaiterActions.Update(data, data.id));
     }
   }
   deleteWaiter(id: number) {

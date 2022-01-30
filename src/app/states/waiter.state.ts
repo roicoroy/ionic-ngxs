@@ -7,129 +7,90 @@ import { IonStorageService } from '../services';
 import { Storage } from '@ionic/storage-angular';
 import { Waiter } from '../models/waiters.type';
 import * as nanoid from 'nanoid';
-import { Point } from '../models/point.type';
+import { WaitersService } from '../services/waiters.service';
 
 export const WAITERS_LIST_KEY = 'waitersList';
 export class WaiterStateModel {
-    waitersList: Waiter[];
-    // selectedWaiter: Waiter;
+    waiters: Waiter[];
+    selectedWaiter: Waiter;
 }
 @State<WaiterStateModel>({
     name: 'waiter',
     defaults: {
-        waitersList: [],
-        // selectedWaiter: null
+        waiters: [],
+        selectedWaiter: null
     }
 })
 @Injectable()
 export class WaiterState {
-    private waitersList: Waiter[] = [
-        new Waiter({
-            id: 0,
-            name: 'Jose',
-            hours: 1.25,
-        }),
-        new Waiter({
-            id: 1,
-            name: 'Mary',
-            hours: 4.50,
-        }),
-        new Waiter({
-            id: 2,
-            name: 'Joe',
-            hours: 4.50,
-            points: [
-                new Point({ id: 0, label: 'Speak English', value: 0.5, type: 'checkbox' }),
-                new Point({ id: 1, label: 'Answer Phone', value: 0.5, type: 'checkbox' }),
-            ],
-        }),
-    ];
     constructor(
-        // private waiterService: WaitersService,
+        private waiterService: WaitersService,
         private storage: Storage,
         private ionStorageService: IonStorageService,
     ) {
     }
     @Selector()
     static getWaiterList(state: WaiterStateModel) {
-        return state.waitersList;
+        return state.waiters;
+    }
+    @Selector()
+    static getSelectedWaiter(state: WaiterStateModel) {
+        return state.selectedWaiter;
     }
     @Action(WaiterActions.Get)
     getWaiter({ getState, setState }: StateContext<WaiterStateModel>) {
-        return this.ionStorageService.getKeyAsObservable(WAITERS_LIST_KEY).pipe(tap((waitersListResponse) => {
-            if (!waitersListResponse) {
-                this.storage.set(WAITERS_LIST_KEY, this.waitersList).then((result) => {
+        return this.waiterService.getItems()
+            .then((result: Waiter[]) => {
+                if (result) {
                     const state = getState();
                     setState({
                         ...state,
-                        waitersList: result,
+                        waiters: result,
                     });
-                });
-            } else {
-                const state = getState();
-                setState({
-                    ...state,
-                    waitersList: waitersListResponse,
-                });
-            }
-        }));
+                    return this.storage.set(WAITERS_LIST_KEY, result);
+                }
+            });
     }
     @Action(WaiterActions.Add)
     addWaiter({ getState, patchState }: StateContext<WaiterStateModel>, { payload }: WaiterActions.Add) {
-        const waiter = new Waiter({
-            id: nanoid(12),
-            name: payload.name,
-        });
-        const result = waiter;
-        this.addItem(result).then(() => {
+        const updateState = payload;
+        return this.waiterService.addItem(payload).then(() => {
             const state = getState();
             patchState({
-                waitersList: [...state.waitersList, result]
+                waiters: [...state.waiters, updateState]
             });
         });
     }
-
+    @Action(WaiterActions.Update)
+    updateWaiter(ctx: StateContext<WaiterStateModel>, { payload, id }: WaiterActions.Update) {
+        return this.waiterService.updateItem(payload).then(() => {
+            const state = ctx.getState();
+            const waitersList = [...state.waiters];
+            const todoIndex = waitersList.findIndex((item) => item.id === id);
+            waitersList[todoIndex] = payload;
+            ctx.setState({
+                ...state,
+                waiters: waitersList,
+            });
+        });
+    }
     @Action(WaiterActions.Delete)
     deleteWaiter({ getState, setState }: StateContext<WaiterStateModel>, { id }: WaiterActions.Delete) {
-        this.deleteItem(id).then(() => {
+        return this.waiterService.deleteItem(id).then(() => {
             const state = getState();
-            const filteredArray = state.waitersList.filter((item) => item.id !== id);
+            const filteredArray = state.waiters.filter((item) => item.id !== id);
             setState({
                 ...state,
-                waitersList: filteredArray,
+                waiters: filteredArray,
             });
         });
     }
-
-    // Add on Storage
-    addItem(item: Waiter): Promise<any> {
-        console.log(item);
-        item.id = nanoid(12);
-        return this.storage.get(WAITERS_LIST_KEY)
-            .then((resWaiters: Waiter[]) => {
-                console.log(resWaiters);
-                if (resWaiters) {
-                    resWaiters.push(item);
-                    return this.storage.set(WAITERS_LIST_KEY, resWaiters);
-                } else {
-                    return this.storage.set(WAITERS_LIST_KEY, [item]);
-                }
-            });
-    }
-    // Delete
-    deleteItem(id: number): Promise<any> {
-        return this.storage.get(WAITERS_LIST_KEY)
-            .then((formItems: Waiter[]) => {
-                if (!formItems || formItems.length === 0) {
-                    return null;
-                }
-                const formsToKeep: Waiter[] = [];
-                for (const form of formItems) {
-                    if (form.id !== id) {
-                        formsToKeep.push(form);
-                    }
-                }
-                return this.storage.set(WAITERS_LIST_KEY, formsToKeep);
-            });
+    @Action(WaiterActions.SetSelected)
+    setSelectedWaiterId({ getState, setState }: StateContext<any>, { payload }: WaiterActions.SetSelected) {
+        const state = getState();
+        setState({
+            ...state,
+            selectedWaiter: payload
+        });
     }
 }

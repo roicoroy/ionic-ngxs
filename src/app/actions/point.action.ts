@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-namespace */
-import { Point } from '../models/Point';
+import { Point } from '../models';
 
 export namespace PointActions {
 

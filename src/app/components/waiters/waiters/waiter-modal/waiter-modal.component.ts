@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { Waiter } from 'src/app/models';
 
@@ -9,6 +9,8 @@ import { Waiter } from 'src/app/models';
   styleUrls: ['./waiter-modal.component.scss'],
 })
 export class WaiterModalComponent implements OnInit {
+  @ViewChild('createPointFormRef', { static: false }) createWaiterFormRef: NgForm;
+
   @Input() waiter: Waiter;
   createWaiterForm: FormGroup;
   nameField: FormControl;
@@ -36,7 +38,7 @@ export class WaiterModalComponent implements OnInit {
       name: this.nameField,
     });
   }
-  addNewPoint() {
+  addNewWaiter() {
     const newWaiter = {
       name: this.createWaiterForm.value.name,
     };
@@ -44,7 +46,7 @@ export class WaiterModalComponent implements OnInit {
       this.modalController.dismiss(newWaiter);
     }
   }
-  saveEditedPoint() {
+  saveEWaiterPoint() {
     const editWaiter = {
       id: this.waiterId,
       name: this.createWaiterForm.value.name,

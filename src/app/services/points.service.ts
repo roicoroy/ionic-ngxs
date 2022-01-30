@@ -13,22 +13,9 @@ export const POINTS_LIST_KEY = 'pointsList';
     providedIn: 'root'
 })
 export class PointsService {
-    private pointsList: Point[] = [
-        new Point({ id: 0, label: 'Speak English', value: 0.5, type: 'checkbox' }),
-        new Point({ id: 1, label: 'Answer Phone', value: 0.5, type: 'checkbox' }),
-        new Point({ id: 2, label: 'Open Wine', value: 0.5, type: 'checkbox' }),
-    ];
-    private baseUrl: string;
     constructor(
         private storage: Storage,
-        private ionStorageService: IonStorageService,
-        private http: HttpClient
-    ) {
-        // this.baseUrl = environment.API_URL;
-    }
-    // async init() {
-    //     return await this.storage.create();
-    // }
+    ) { }
 
     // Read
     getItems(): Promise<Point[]> {

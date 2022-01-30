@@ -25,7 +25,6 @@ export class SettingsNgxsPage implements OnInit {
    ngOnInit() {
    }
    ionViewDidEnter() {
-      // this.selectedTab(0);
       this.page = 0;
    }
    selectedTab(index: number) {
@@ -36,14 +35,9 @@ export class SettingsNgxsPage implements OnInit {
       this.page = index.toString();
    }
    segmentChanged(ev: any) {
-      // console.log('Segment changed', ev);
    }
    home() {
       this.navCtrl.navigateBack('home').then(() => {
-         // this.pointsList.subscribe((points) => {
-         //    console.log(points);
-         //    this.storage.set(POINTS_LIST_KEY, points);
-         // });
       });
    }
 }

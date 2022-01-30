@@ -20,17 +20,9 @@ const routes: Routes = [
     loadChildren: () => import('./settings-ngxs/settings-ngxs.module').then(m => m.SettingsNgxsPageModule)
   },
   {
-    path: 'test-array',
-    loadChildren: () => import('./test-array/test-array.module').then(m => m.TestArrayPageModule)
-  },
-  {
     path: 'result',
     loadChildren: () => import('./calculator-ngxs/result/result.module').then( m => m.ResultPageModule)
   },
-  // {
-  //   path: 'waiters',
-  //   loadChildren: () => import('./components/waiters/waiters.module').then( m => m.WaitersPageModule)
-  // }
 ];
 
 @NgModule({

@@ -28,7 +28,7 @@ export class PointsState {
         return state.points;
     }
     @Selector()
-    static getSelectedWaiter(state: PointsStateModel) {
+    static getSelectedPoint(state: PointsStateModel) {
         return state.selectedPoint;
     }
     @Action(PointActions.Get)
