@@ -1,17 +1,10 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons collapse="true" slot="start">
-      <ion-button [style.visibility]="(isBeginning) ? '' : 'hidden'" (click)="home()">
+    <ion-buttons [style.visibility]="(isBeginning) ? '' : 'hidden'" collapse="true" slot="start">
+      <ion-button (click)="home()">
         <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ng-container *ngIf="currentSlide === 'Date'">
-      <ion-buttons collapse="true" slot="end">
-        <ion-button>
-          <ion-icon color='warning' slot="icon-only" name="close-outline"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ng-container>
   </ion-toolbar>
   <ion-toolbar>
     <div
@@ -48,6 +41,27 @@
                 <div *ngFor="let waiter of waitersListArray.controls; let i = index" [formGroupName]="i">
                   <mat-card class='container' @fade>
                     <mat-card-content>
+                      <ion-col [size]="12">
+                        <ion-button expand="block" tooltip tooltipHtml="I'm a multi-line<br> HTML tooltip"
+                          positionV="top" [arrow]="showArrow" [event]="tooltipEvent" [debounce]="debounce"
+                          [duration]="duration">
+                          Top tooltip
+                        </ion-button>
+
+                        <button mat-button (click)="tooltip.toggle()"
+                          aria-label="Show/Hide tooltip on the button at the end of this section"
+                          class="example-action-button">
+                          toggle show/hide
+                        </button>
+
+
+                        <button mat-raised-button matTooltip="Tooltip" 
+                          aria-label="Displays a tooltip position">
+                          Tooltip Button
+                        </button>
+
+
+                      </ion-col>
                       <ion-row>
                         <ion-col size="6">
                           <ion-list-header>

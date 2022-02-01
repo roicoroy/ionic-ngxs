@@ -1,0 +1,10 @@
+.app-color {
+  background-color: yellowgreen;
+}
+mat-card-actions {
+  justify-content: space-around;
+  display: flex;
+  ion-button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,19 @@
+.help-hint-container {
+	position: relative;
+	display: inline-block;
+	padding-right: 30px;
+}
+
+mat-icon {
+	position: absolute;
+	top: calc(50% - 12px);
+	right: 0px;
+	cursor: pointer;
+}
+.ref-div{
+	width: 80% !important
+}
+
+custom-mat-form-field{
+	width: calc(100% - 15px);
+}

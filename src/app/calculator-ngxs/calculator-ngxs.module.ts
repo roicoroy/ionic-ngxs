@@ -9,6 +9,8 @@ import { CalculatorNgxsPageRoutingModule } from './calculator-ngxs-routing.modul
 import { CalculatorNgxsPage } from './calculator-ngxs.page';
 import { IonicSelectableModule } from 'ionic-selectable';
 import { MaterialModule } from '../material.module';
+import { TooltipsModule } from '../components/ionic4-tooltips/src/tooltips.module';
+import { DirectivesModule } from '../directives/directives.module';
 
 @NgModule({
   imports: [
@@ -19,6 +21,8 @@ import { MaterialModule } from '../material.module';
     MaterialModule,
     ReactiveFormsModule,
     IonicSelectableModule,
+    TooltipsModule,
+    DirectivesModule
   ],
   declarations: [CalculatorNgxsPage]
 })

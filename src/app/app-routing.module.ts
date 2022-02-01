@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'test-page',
     pathMatch: 'full'
   },
   {
@@ -22,6 +22,14 @@ const routes: Routes = [
   {
     path: 'result',
     loadChildren: () => import('./calculator-ngxs/result/result.module').then( m => m.ResultPageModule)
+  },
+  {
+    path: 'test-page',
+    loadChildren: () => import('./test-page/test-page.module').then( m => m.TestPagePageModule)
+  },
+  {
+    path: 'entry-form',
+    loadChildren: () => import('./entry-form/entry-form.module').then( m => m.EntryFormPageModule)
   },
 ];
 

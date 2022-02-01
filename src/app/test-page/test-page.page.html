@@ -1,0 +1,122 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>MAT Entry Form</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <form [formGroup]="entryForm">
+
+
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Tips Amout" formControlName="tipsAmout" required>
+            <mat-error *ngFor="let validation of validation_messages.tipsAmout">
+              <mat-error class="error-message"
+                *ngIf="entryForm.get('tipsAmout').hasError(validation.type) && (entryForm.get('tipsAmout').dirty || entryForm.get('tipsAmout').touched)">
+                {{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <input matInput [matDatepicker]="picker" placeholder="Date of the shift" formControlName="date" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngFor="let validation of validation_messages.date">
+              <mat-error class="error-message"
+                *ngIf="entryForm.get('date').hasError(validation.type) && (entryForm.get('date').dirty || entryForm.get('date').touched)">
+                {{validation.message}}
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+
+          <!-- <mat-form-field class="full-width app-color"> -->
+            <mat-card class='app-color'>
+              <mat-card-title>Jose </mat-card-title>
+              <mat-card-actions class='ion-text-center'>
+                <ion-col size="6">
+                  <ion-button expand="block" fill="outline" shape="round">
+                    {{ 'Points' }}
+                  </ion-button>
+                  <ion-text color="danger">
+                    Add points
+                  </ion-text>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-button expand="block" fill="outline" shape="round">
+                    {{ 'Hours' }}
+                  </ion-button>
+                  <ion-text color="danger">
+                    Add hours
+                  </ion-text>
+                </ion-col>
+              </mat-card-actions>
+            </mat-card>
+          <!-- </mat-form-field> -->
+          <br />
+
+
+
+        </form>
+      </ion-col>
+      <!-- <ion-col size="12">
+        <form [formGroup]="accountDetailsForm" novalidate (ngSubmit)="onSubmitAccountDetails(accountDetailsForm.value)">
+  
+          <mat-form-field class="full-width">
+            <input matInput maxlength="25" placeholder="Username" formControlName="username" required>
+            <mat-error *ngFor="let validation of account_validation_messages.username">
+              <mat-error class="error-message" *ngIf="accountDetailsForm.get('username').hasError(validation.type) && (accountDetailsForm.get('username').dirty || accountDetailsForm.get('username').touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field class="full-width">
+            <input matInput type="email" placeholder="Email" formControlName="email" required>
+            <mat-error *ngFor="let validation of account_validation_messages.email">
+              <mat-error class="error-message" *ngIf="accountDetailsForm.get('email').hasError(validation.type) && (accountDetailsForm.get('email').dirty || accountDetailsForm.get('email').touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+  
+  
+          <div formGroupName="matchingPasswords">
+            <mat-form-field class="full-width">
+              <input matInput type="password" placeholder="Password" formControlName="password" required>
+              <mat-error *ngFor="let validation of account_validation_messages.password">
+                <mat-error class="error-message" *ngIf="accountDetailsForm.get('matchingPasswords').get('password').hasError(validation.type) && (accountDetailsForm.get('matchingPasswords').get('password').dirty || accountDetailsForm.get('matchingPasswords').get('password').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field class="full-width">
+              <input matInput type="password" placeholder="Confirm Password" formControlName="confirm_password"  [errorStateMatcher]="parentErrorStateMatcher" required>
+              <mat-error *ngFor="let validation of account_validation_messages.confirm_password">
+                <mat-error class="error-message" *ngIf="(accountDetailsForm.get('matchingPasswords').get('confirm_password').hasError(validation.type)|| accountDetailsForm.get('matchingPasswords').hasError(validation.type)) && (accountDetailsForm.get('matchingPasswords').get('confirm_password').dirty || accountDetailsForm.get('matchingPasswords').get('confirm_password').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+  
+          </div>
+  
+          <mat-checkbox formControlName="terms">
+            I accept terms and conditions
+          </mat-checkbox>
+          <mat-error *ngFor="let validation of account_validation_messages.terms">
+            <mat-error class="error-message" *ngIf="accountDetailsForm.get('terms').hasError(validation.type) && (accountDetailsForm.get('terms').dirty || accountDetailsForm.get('terms').touched)">{{validation.message}}</mat-error>
+          </mat-error>
+  
+          <button class="submit-btn" color="primary" mat-raised-button type="submit" [disabled]="!accountDetailsForm.valid">
+            Submit
+          </button>
+  
+        </form>
+      </ion-col> -->
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button (ngSubmit)="onSubmit()" class="submit-btn" color="primary" mat-raised-button type="submit"
+      [disabled]="!entryForm.valid">
+      Submit
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
