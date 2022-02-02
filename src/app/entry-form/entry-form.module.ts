@@ -1,20 +1,35 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
 import { EntryFormPageRoutingModule } from './entry-form-routing.module';
 
 import { EntryFormPage } from './entry-form.page';
+import { FormPage } from './form/form.page';
+import { FormPageModule } from './form/form.module';
+import { MaterialModule } from '../material.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EntryFormPageRoutingModule
+    EntryFormPageRoutingModule,
+    FormPageModule,
+    MaterialModule,
+    ReactiveFormsModule,
   ],
-  declarations: [EntryFormPage]
+  declarations: [
+    EntryFormPage,
+    // FormPage
+  ],
+  entryComponents: [
+    // FormPage
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ]
 })
-export class EntryFormPageModule {}
+export class EntryFormPageModule { }

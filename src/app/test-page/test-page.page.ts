@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-test-page',
@@ -25,7 +26,10 @@ export class TestPagePage implements OnInit {
     ],
   };
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private navCtrl: NavController
+  ) { }
 
   ngOnInit() {
     this.createForms();
@@ -55,5 +59,8 @@ export class TestPagePage implements OnInit {
   }
   addHours() {
 
+  }
+  entryFormPage() {
+    this.navCtrl.navigateRoot('entry-form');
   }
 }

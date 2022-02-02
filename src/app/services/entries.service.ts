@@ -1,8 +1,7 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import * as nanoid from 'nanoid';
-import { IonStorageService } from '.';
-// import { TEAM_ENTRY } from '../calculator-ngxs/calculator-ngxs.page';
+export const TEAM_ENTRY = 'teamEntry';
 
 @Injectable({
   providedIn: 'root'
@@ -11,34 +10,46 @@ export class EntriesService {
 
   constructor(
     private storage: Storage,
-    private ionStorageService: IonStorageService,
   ) { }
-
-  // ngOnInit() {
-  //   this.sub = this.ionStorageService.getKeyAsObservable(TEAM_ENTRY).subscribe((entries) => {
-  //     this.data = entries;
-  //     console.log(this.data);
-  //   });
-  // }
-deleteAll(){
-  this.storage.remove('teamEntry');
-}
+  deleteAll() {
+    this.storage.remove(TEAM_ENTRY);
+  }
+  getEntries(): Promise<any[]> {
+    return this.storage.get(TEAM_ENTRY);
+  }
   addEntry(item: any): Promise<any[]> {
     item.id = nanoid(12);
     console.log(item);
-    return this.storage.get('teamEntry')
+    return this.storage.get(TEAM_ENTRY)
       .then((formItems: any[]) => {
         console.log(formItems);
         if (formItems) {
           formItems.push(item);
-          return this.storage.set('teamEntry', formItems);
+          return this.storage.set(TEAM_ENTRY, formItems);
         } else {
-          return this.storage.set('teamEntry', [item]);
+          return this.storage.set(TEAM_ENTRY, [item]);
         }
       });
   }
+  updateItem(item: any): Promise<any> {
+    return this.storage.get(TEAM_ENTRY)
+      .then((formItems: any[]) => {
+        if (!formItems || formItems.length === 0) {
+          return null;
+        }
+        const newFormItem: any[] = [];
+        for (const form of formItems) {
+          if (form.id === item.id) {
+            newFormItem.push(item);
+          } else {
+            newFormItem.push(form);
+          }
+        }
+        return this.storage.set(TEAM_ENTRY, newFormItem);
+      });
+  }
   deleteEntry(id: number): Promise<any> {
-    return this.storage.get('teamEntry')
+    return this.storage.get(TEAM_ENTRY)
       .then((formItems: any[]) => {
         if (!formItems || formItems.length === 0) {
           return null;
@@ -49,7 +60,7 @@ deleteAll(){
             formsToKeep.push(form);
           }
         }
-        return this.storage.set('teamEntry', formsToKeep);
+        return this.storage.set(TEAM_ENTRY, formsToKeep);
       });
   }
 }

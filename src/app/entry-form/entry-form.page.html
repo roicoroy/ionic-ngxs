@@ -1,9 +1,38 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>entry-form</ion-title>
+      <!-- <ion-buttons slot="start">
+          <ion-button (click)="settings()">
+              <ion-icon slot="start" name="settings"></ion-icon>
+          </ion-button>
+      </ion-buttons> -->
+      <ion-title>
+          Entry Form
+      </ion-title>
+      <ion-buttons slot="end">
+          <ion-button (click)='testPage()'>
+              Test Page
+          </ion-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+      <ion-toolbar>
+          <ion-title size="large">Entry Form</ion-title>
+      </ion-toolbar>
+  </ion-header>
+  <app-ion-form></app-ion-form>
 
+  <form [formGroup]="waitersListForm" #waitersFormRef="ngForm">
+    <div formArrayName="waitersList">
+      <div *ngFor="let waiter of waitersListArray.controls; let i = index" [formGroupName]="i">
+        <mat-card class='container' @fade>
+          <mat-card-content>
+   {{ i }}
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </form>
 </ion-content>

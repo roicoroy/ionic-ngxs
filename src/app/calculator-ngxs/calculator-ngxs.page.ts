@@ -58,9 +58,6 @@ export class CalculatorNgxsPage implements OnInit {
   @ViewChild('dateFormRef', { static: false }) dateFormRef: NgForm;
   @ViewChild('tipsFormRef', { static: false }) tipsFormRef: NgForm;
 
-
-
-
   toggle = true;
   group = null;
   selected = [];
@@ -93,8 +90,8 @@ export class CalculatorNgxsPage implements OnInit {
   tipsControl: FormControl;
   //
   waiterForm: FormGroup;
-  waiterNameControl: FormControl;
-  waitersArrayFrom: FormArray;
+  // waiterNameControl: FormControl;
+  // waitersArrayFrom: FormArray;
   public waitersListForm: FormGroup;
   //validatorS
   isNameValidFormSubmitted: boolean | null = null;
