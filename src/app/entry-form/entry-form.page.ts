@@ -34,8 +34,16 @@ export class EntryFormPage implements OnInit {
   @Select(WaiterState.getWaiterList) waitersList: Observable<Waiter[]>;
   @ViewChild('waitersFormRef', { static: false }) waitersFormRef: NgForm;
 
-  public waitersListForm: FormGroup;
-
+  waitersListForm: FormGroup;
+  entryForm: FormGroup;
+  validationMessages = {
+    tipsAmout: [
+      { type: 'required', message: 'tipsAmout is required' }
+    ],
+    date: [
+      { type: 'required', message: 'Date is required' }
+    ],
+  };
   constructor(
     private formBuilder: FormBuilder,
     private store: Store,
@@ -60,24 +68,45 @@ export class EntryFormPage implements OnInit {
         ...this.createFormArray(waitersListData)
       ])
     });
+    this.entryForm = this.formBuilder.group({
+      date: ['', Validators.required],
+      tipsAmout: ['', Validators.required],
+    });
   }
-  createField(name): FormGroup {
+  createField(name, totalPoints, pointsList): FormGroup {
     return this.formBuilder.group({
       name: [name, Validators.required],
-      points: [''],
+      totalPoints: [totalPoints],
       hours: ['', Validators.required],
-      pointsList: [[], Validators.required],
+      pointsList: [pointsList, Validators.required],
     });
   }
   createFormArray(waitersListData: Waiter[]): FormGroup[] {
     const count = waitersListData.length;
     const arr = [];
     for (let i = 0; i < count; i++) {
-      arr.push(this.createField(waitersListData[i].name));
+      const totalPoints = [];
+      console.log(waitersListData[i].pointsList);
+      if (waitersListData[i].pointsList != null || waitersListData[i].pointsList !== undefined) {
+        waitersListData[i].pointsList.forEach((point, ind) => {
+          totalPoints.push(point.value);
+        });
+      }
+      arr.push(this.createField(waitersListData[i].name, this.sumPointsArray(totalPoints), waitersListData[i].pointsList));
     }
     return arr;
   }
+  sumPointsArray(array) {
+    const sum = array.reduce((a, b) => a + b, 0);
+    return sum;
+  }
   testPage() {
     this.navCtrl.navigateForward('test-page');
+  }
+  homePage() {
+    this.navCtrl.navigateForward('home');
+  }
+  submitForm() {
+    console.log(this.waitersListForm);
   }
 }

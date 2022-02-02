@@ -10,6 +10,7 @@ import { EntryFormPage } from './entry-form.page';
 // import { FormPage } from './form/form.page';
 // import { FormPageModule } from './form/form.module';
 import { MaterialModule } from '../material.module';
+import { FormsComponent } from '../test-page/forms/forms.component';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { MaterialModule } from '../material.module';
   declarations: [
     EntryFormPage,
     // FormPage
+    FormsComponent
   ],
   entryComponents: [
     // FormPage

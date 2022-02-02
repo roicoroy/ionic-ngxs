@@ -74,6 +74,12 @@ export class WaiterState {
             });
         });
     }
+    @Action(WaiterActions.UpdateWaiterPoints)
+    updateWaiterPoints(ctx: StateContext<WaiterStateModel>, { payload, id }: WaiterActions.Update) {
+        return this.waiterService.updateWaiterPoint(payload).then(() => {
+
+        });
+    }
     @Action(WaiterActions.Delete)
     deleteWaiter({ getState, setState }: StateContext<WaiterStateModel>, { id }: WaiterActions.Delete) {
         return this.waiterService.deleteItem(id).then(() => {

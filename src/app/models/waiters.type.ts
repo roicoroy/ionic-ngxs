@@ -6,7 +6,7 @@ export class Waiter implements IWaiter {
     id?: number;
     name?: string;
     pointsList?: IPoint[];
-    totalPoints: number;
+    totalPoints?: number;
     hours?: number;
     tipsShare?: number;
 

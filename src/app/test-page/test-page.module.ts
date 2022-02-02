@@ -23,7 +23,7 @@ import { FormsComponent } from './forms/forms.component';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     TestPagePage,
-    FormsComponent
+    // FormsComponent
   ]
 })
 export class TestPagePageModule {}

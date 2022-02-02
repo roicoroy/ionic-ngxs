@@ -8,13 +8,11 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-row>
-<ion-card *ngFor="let w of waitersList | async">
+
+<ion-card *ngFor="let w of waitersList | async; let i = index">
   <ion-card-content>
-    <ion-item lines='none' button (click)='editWaiter(w)'>
-      <ion-avatar>
-        <ion-img [src]="'assets/shapes.svg'"></ion-img>
-      </ion-avatar>
-      <ion-label>{{ w.name }}</ion-label>
+    <ion-item lines='none'>
+      <ion-label (click)='editWaiter(w)'>{{ w.name }}</ion-label>
       <ion-buttons slot="end">
         <ion-button (click)="deleteWaiter(w.id)" expand="block" fill="clear" shape="round">
           <ion-icon color='danger' name="close"></ion-icon>
@@ -22,4 +20,13 @@
       </ion-buttons>
     </ion-item>
   </ion-card-content>
+  <ion-card-content class='color'>
+    <ion-item lines='none'>
+      <ionic-selectable [items]="pointsListState | async" itemValueField="id"
+        itemTextField="label" [(ngModel)]="w.pointsList" [isMultiple]="true" confirmButtonText="OK"
+        closeButtonText="Close" (onChange)='onSelectTableChange($event, i)'>
+      </ionic-selectable>
+    </ion-item>
+  </ion-card-content>
+
 </ion-card>

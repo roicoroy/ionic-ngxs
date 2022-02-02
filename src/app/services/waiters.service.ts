@@ -16,7 +16,7 @@ export class WaitersService {
       tipsShare: null,
       hours: null,
       totalPoints: null,
-      pointsList: null,
+      // pointsList: null,
       // pointsList: [
       //   new Point({ id: 0, label: 'Speak English', value: 0.5, type: 'checkbox' }),
       //   new Point({ id: 1, label: 'Answer Phone', value: 0.5, type: 'checkbox' }),
@@ -28,7 +28,10 @@ export class WaitersService {
       tipsShare: null,
       hours: null,
       totalPoints: null,
-      pointsList: null,
+      // pointsList: [
+      //   new Point({ id: 0, label: 'Speak English', value: 0.5, type: 'checkbox' }),
+      //   new Point({ id: 1, label: 'Answer Phone', value: 0.5, type: 'checkbox' }),
+      // ],
     }),
     new Waiter({
       id: 2,
@@ -36,7 +39,10 @@ export class WaitersService {
       tipsShare: null,
       hours: null,
       totalPoints: null,
-      pointsList: null,
+      // pointsList: [
+      //   new Point({ id: 0, label: 'Speak English', value: 0.5, type: 'checkbox' }),
+      //   new Point({ id: 1, label: 'Answer Phone', value: 0.5, type: 'checkbox' }),
+      // ],
     }),
   ];
   constructor(
@@ -85,6 +91,12 @@ export class WaitersService {
         }
         return this.storage.set(WAITERS_LIST_KEY, newFormItem);
       });
+  }
+  // Update
+  updateWaiterPoint(item: Waiter): Promise<any> {
+    console.log(item);
+
+    return this.storage.get(WAITERS_LIST_KEY);
   }
   // Delete
   deleteItem(id: number): Promise<any> {

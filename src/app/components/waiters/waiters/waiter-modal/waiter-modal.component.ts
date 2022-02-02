@@ -39,9 +39,9 @@ export class WaiterModalComponent implements OnInit {
     });
   }
   addNewWaiter() {
-    const newWaiter = {
-      name: this.createWaiterForm.value.name,
-    };
+    const newWaiter = new Waiter({
+        name: this.createWaiterForm.value.name,
+    });
     if (this.createWaiterForm.valid) {
       this.modalController.dismiss(newWaiter);
     }

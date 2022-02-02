@@ -3,6 +3,11 @@
     <ion-title>
       Entry Form
     </ion-title>
+    <ion-buttons collapse="true" slot="start">
+      <ion-button (click)='homePage()'>
+        Home
+      </ion-button>
+    </ion-buttons>
     <ion-buttons collapse="true" slot="end">
       <ion-button (click)='testPage()'>
         Test Page
@@ -14,34 +19,53 @@
 <ion-content [fullscreen]="true">
   <ion-grid>
     <ion-row>
+      <ion-col class='ion-padding ion-margin'>
+        <form [formGroup]="entryForm">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Tips Amout" formControlName="tipsAmout" required>
+            <mat-error *ngFor="let validation of validationMessages.tipsAmout">
+              <mat-error class="error-message"
+                *ngIf="entryForm.get('tipsAmout').hasError(validation.type) && (entryForm.get('tipsAmout').dirty || entryForm.get('tipsAmout').touched)">
+                {{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input matInput [matDatepicker]="picker" placeholder="Date of the shift" formControlName="date" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngFor="let validation of validationMessages.date">
+              <mat-error class="error-message"
+                *ngIf="entryForm.get('date').hasError(validation.type) && (entryForm.get('date').dirty || entryForm.get('date').touched)">
+                {{validation.message}}
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+        </form>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
       <ion-col>
-
         <form [formGroup]="waitersListForm" #waitersFormRef="ngForm">
-
           <ion-item-group formArrayName="waitersList">
-
-            <ion-item-divider>
-              <ion-label>Waiters List Form Array pre filled</ion-label>
-            </ion-item-divider>
-            <!-- 
-            <ion-item *ngFor="let waiter of waitersListArray.controls; let i = index" [formGroupName]="i">
-              <ion-label>Label</ion-label>
-            </ion-item> -->
 
             <ion-card *ngFor="let waiter of waitersListArray.controls; let i = index" [formGroupName]="i">
               <ion-card-header>
                 <ion-row>
-                  <ion-col size="8" class='title'>
-                    <ion-card-title>
-                      Jose
-                      <ion-badge color='primary'>1,5</ion-badge>
-                    </ion-card-title>
+                  <ion-col size="6" class='title'>
+                    <ion-item lines='none'>
+                      <ion-label>
+                        {{ waiter.value.name }}
+                      </ion-label>
+                    </ion-item>
                   </ion-col>
-                  <ion-col size="4" class='center-elements'>
-                    <ion-button size='large' expand="block" fill="clear" shape="round">
-                      <ion-icon *ngIf='true' size='large' color='secondary' slot="icon-only" name="alarm-outline"></ion-icon>
-                      <ion-text *ngIf='false' color="dark">
-                        4.75
+                  <ion-col size="3" class='center-elements' >
+                    <ion-icon size='large' color='secondary' name="alarm-outline"></ion-icon>
+                  </ion-col>
+                  <ion-col size="3" class='center-elements'>
+                    <ion-button expand="block" fill="clear" shape="round">
+                      <ion-text *ngIf='true' color="secondary">
+                        Add Hour
                       </ion-text>
                     </ion-button>
                   </ion-col>
@@ -50,35 +74,32 @@
               <ion-card-content>
                 <ion-row class='ion-text-center'>
                   <ion-col class="background" size="12">
-                    <ion-item-group>
+                    <ion-list *ngIf='waiter.value.pointsList'>
                       <ion-card-subtitle>Waiters Points</ion-card-subtitle>
-                      <ion-item>
-                        <ion-label>Label</ion-label>
+                      <div class='point-badge-container'>
+                        <ion-badge color='warning'>
+                          {{ waiter.value.totalPoints }}
+                        </ion-badge>
+                      </div>
+                      <ion-item *ngFor='let points of waiter.value.pointsList'>
+                        <ion-label>{{points.label}}</ion-label>
+                        <ion-text>{{points.value}}</ion-text>
                       </ion-item>
-                      <ion-item>
-                        <ion-label>Label</ion-label>
-                      </ion-item>
-                    </ion-item-group>
+                    </ion-list>
                   </ion-col>
                 </ion-row>
               </ion-card-content>
             </ion-card>
-
           </ion-item-group>
-
-
-          <!-- <div formArrayName="waitersList">
-            <div *ngFor="let waiter of waitersListArray.controls; let i = index" [formGroupName]="i">
-              <mat-card class='container'>
-              <mat-card-content>
-       {{ i }}
-              </mat-card-content>
-            </mat-card>
-            </div>
-          </div> -->
-
         </form>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button (click)="submitForm()" color='success' expand="block" fill="outline" shape="round">
+      Submit
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

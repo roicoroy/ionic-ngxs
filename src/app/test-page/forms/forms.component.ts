@@ -8,7 +8,7 @@ import { PhoneValidator } from '../validators/phone.validator';
 import { UsernameValidator } from '../validators/username.validator';
 
 @Component({
-  selector: 'app-forms-page',
+  selector: 'app-material-forms',
   templateUrl: './forms.component.html',
   styleUrls: ['./forms.component.scss']
 })

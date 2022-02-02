@@ -18,6 +18,11 @@ export namespace WaiterActions {
         constructor(public payload: Waiter, public id?: number) {
         }
     }
+    export class UpdateWaiterPoints {
+        static readonly type = '[Waiter] Update Waiter Points';
+        constructor(public payload: Waiter, public id?: number) {
+        }
+    }
     export class Delete {
         static readonly type = '[Waiter] Delete';
         constructor(public id: number) {
