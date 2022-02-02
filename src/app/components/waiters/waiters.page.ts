@@ -52,12 +52,10 @@ export class WaitersPage implements OnInit {
     const { data } = await modal.onWillDismiss();
     if (data) {
       const w = new Waiter(data);
-
       this.store.dispatch(new WaiterActions.Update(w, data.id));
     }
   }
   onSelectTableChange($event, i) {
-    console.log($event.value);
     const waiter = new Waiter({});
     this.waitersList.subscribe((response: any) => {
       waiter.id = response[i].id;

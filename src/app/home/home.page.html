@@ -17,12 +17,15 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
+    <ion-header collapse="condense" mode="ios">
         <ion-toolbar>
-            <ion-title size="large">Home</ion-title>
+            <ion-card-header>
+                <ion-card-subtitle>Welcome</ion-card-subtitle>
+                <ion-card-title>Tips Share Calculator</ion-card-title>
+            </ion-card-header>
         </ion-toolbar>
     </ion-header>
-    <ion-grid fixed>
+    <ion-grid>
         <ion-row>
             <ion-col>
                 <ion-item button *ngFor='let entry of teamEntryArray | async' (click)='resultPage(entry)'>

@@ -20,17 +20,17 @@ export class HomePage implements OnInit {
     private ionStorageService: IonStorageService,
   ) { }
   ngOnInit() {
-    this.sub = this.ionStorageService.getKeyAsObservable(TEAM_ENTRY).subscribe((entries) => {
-      this.data = entries;
-      this.teamEntryArray.next(entries);
-      console.log(entries);
-    });
+    // this.sub = this.ionStorageService.getKeyAsObservable(TEAM_ENTRY).subscribe((entries) => {
+    //   this.data = entries;
+    //   this.teamEntryArray.next(entries);
+    //   console.log(entries);
+    // });
   }
   // calculator(){
   // //   this.navCtrl.navigateBack('test-array');
   // // }
   calculator() {
-    this.navCtrl.navigateBack('calculator-ngxs');
+    this.navCtrl.navigateBack('entry-form');
   }
   settings() {
     this.navCtrl.navigateBack('settings-ngxs');

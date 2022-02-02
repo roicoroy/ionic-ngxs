@@ -25,6 +25,14 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 // @import "~bootstrap/dist/css/bootstrap.min.css";
+
+:root{
+  .toolbar-title{
+    height: 10%;
+    background-color: blue!important;
+  }
+}
+
 .popover-class {
     --width: 250px;
     --height: 400px;

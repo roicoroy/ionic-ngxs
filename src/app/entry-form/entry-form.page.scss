@@ -19,3 +19,17 @@ ion-card-header {
   align-items: center;
   justify-content: center;
 }
+ion-toolbar {
+  --min-height: 80px;
+}
+
+:root{
+  .toolbar-title{
+    height: 10%;
+    background-color: blue!important;
+  }
+}
+.toolbar-title {
+  background-color: blue!important;
+  height: 50px;
+}
