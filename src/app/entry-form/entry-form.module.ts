@@ -7,8 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { EntryFormPageRoutingModule } from './entry-form-routing.module';
 
 import { EntryFormPage } from './entry-form.page';
-import { FormPage } from './form/form.page';
-import { FormPageModule } from './form/form.module';
+// import { FormPage } from './form/form.page';
+// import { FormPageModule } from './form/form.module';
 import { MaterialModule } from '../material.module';
 
 @NgModule({
@@ -17,7 +17,7 @@ import { MaterialModule } from '../material.module';
     FormsModule,
     IonicModule,
     EntryFormPageRoutingModule,
-    FormPageModule,
+    // FormPageModule,
     MaterialModule,
     ReactiveFormsModule,
   ],

@@ -66,7 +66,7 @@ export class EntryFormPage implements OnInit {
       name: [name, Validators.required],
       points: [''],
       hours: ['', Validators.required],
-      pointsArray: [[], Validators.required],
+      pointsList: [[], Validators.required],
     });
   }
   createFormArray(waitersListData: Waiter[]): FormGroup[] {
@@ -78,6 +78,6 @@ export class EntryFormPage implements OnInit {
     return arr;
   }
   testPage() {
-    this.navCtrl.navigateRoot('test-page');
+    this.navCtrl.navigateForward('test-page');
   }
 }

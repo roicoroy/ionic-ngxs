@@ -61,6 +61,6 @@ export class TestPagePage implements OnInit {
 
   }
   entryFormPage() {
-    this.navCtrl.navigateRoot('entry-form');
+    this.navCtrl.navigateBack('entry-form');
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import * as nanoid from 'nanoid';
+import { Point } from '../models';
 import { Waiter } from '../models/waiters.type';
 
 export const WAITERS_LIST_KEY = 'waitersList';
@@ -8,17 +9,54 @@ export const WAITERS_LIST_KEY = 'waitersList';
   providedIn: 'root'
 })
 export class WaitersService {
+  private waitersList: Waiter[] = [
+    new Waiter({
+      id: 0,
+      name: 'Jose',
+      tipsShare: null,
+      hours: null,
+      totalPoints: null,
+      pointsList: null,
+      // pointsList: [
+      //   new Point({ id: 0, label: 'Speak English', value: 0.5, type: 'checkbox' }),
+      //   new Point({ id: 1, label: 'Answer Phone', value: 0.5, type: 'checkbox' }),
+      // ],
+    }),
+    new Waiter({
+      id: 1,
+      name: 'Mary',
+      tipsShare: null,
+      hours: null,
+      totalPoints: null,
+      pointsList: null,
+    }),
+    new Waiter({
+      id: 2,
+      name: 'Joe',
+      tipsShare: null,
+      hours: null,
+      totalPoints: null,
+      pointsList: null,
+    }),
+  ];
   constructor(
     private storage: Storage,
   ) { }
   // Read
-  getItems(): Promise<Waiter[]> {
-    return this.storage.get(WAITERS_LIST_KEY);
+  async getItems(): Promise<Waiter[]> {
+    return this.storage.get(WAITERS_LIST_KEY).then((storedList) => {
+      if (!storedList) {
+        return this.storage.set(WAITERS_LIST_KEY, this.waitersList);
+      } else {
+        return new Promise(resolve => {
+          resolve(storedList);
+        });
+      }
+    });
   }
   // Create
   addItem(item: Waiter): Promise<Waiter[]> {
     item.id = nanoid(12);
-    console.log(item);
     return this.storage.get(WAITERS_LIST_KEY)
       .then((formItems: Waiter[]) => {
         console.log(formItems);

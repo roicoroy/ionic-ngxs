@@ -5,14 +5,16 @@ import { IWaiter } from './waiters.interface';
 export class Waiter implements IWaiter {
     id?: number;
     name?: string;
-    points?: IPoint[];
+    pointsList?: IPoint[];
+    totalPoints: number;
     hours?: number;
     tipsShare?: number;
 
     constructor(waiter: IWaiter) {
         this.id = waiter?.id;
         this.name = waiter.name;
-        this.points = waiter.points;
+        this.pointsList = waiter.pointsList;
+        this.totalPoints = waiter.totalPoints;
         this.hours = waiter.hours;
         this.tipsShare = waiter.tipsShare;
     }
