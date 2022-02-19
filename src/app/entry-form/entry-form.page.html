@@ -1,26 +1,29 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="homePage()">
+        <ion-icon slot="start" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>
-      Entry Form
+      Home
     </ion-title>
-    <ion-buttons collapse="true" slot="start">
-      <ion-button (click)='homePage()'>
-        Home
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons collapse="true" slot="end">
-      <ion-button (click)='testPage()'>
-        Test Page
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <ion-header collapse="condense" mode="ios">
+    <ion-toolbar>
+      <ion-card-header>
+        <ion-card-subtitle>Welcome</ion-card-subtitle>
+        <ion-card-title>Tips Share Calculator</ion-card-title>
+      </ion-card-header>
+    </ion-toolbar>
+  </ion-header>
   <ion-grid>
     <ion-row>
       <ion-col class='ion-padding ion-margin'>
-        <form [formGroup]="entryForm">
+        <form [formGroup]="entryForm" #entryFormRef>
           <mat-form-field class="full-width">
             <input matInput placeholder="Tips Amout" formControlName="tipsAmout" required>
             <mat-error *ngFor="let validation of validationMessages.tipsAmout">
@@ -59,13 +62,17 @@
                       </ion-label>
                     </ion-item>
                   </ion-col>
-                  <ion-col size="3" class='center-elements' >
+                  <!-- <ion-col size="3" class='center-elements'>
                     <ion-icon size='large' color='secondary' name="alarm-outline"></ion-icon>
-                  </ion-col>
-                  <ion-col size="3" class='center-elements'>
-                    <ion-button expand="block" fill="clear" shape="round">
-                      <ion-text *ngIf='true' color="secondary">
-                        Add Hour
+                  </ion-col> -->
+                  <ion-col  class='center-elements'>
+                    <ion-text (click)="showPicker(i)" color="primary" *ngIf='waiter.value.hours !== null'>
+                      
+                    </ion-text>
+                    <ion-button (click)="showPicker(i)" expand="block" fill="outline" shape="round">
+                      <ion-icon *ngIf='waiter.value.hours === null' name="timer-sharp"></ion-icon>
+                      <ion-text *ngIf='waiter.value.hours !== null'>
+                        {{ waiter.value.hours }}
                       </ion-text>
                     </ion-button>
                   </ion-col>
@@ -98,7 +105,7 @@
 </ion-content>
 <ion-footer>
   <ion-toolbar>
-    <ion-button (click)="submitForm()" color='success' expand="block" fill="outline" shape="round">
+    <ion-button [disabled]="!entryForm.valid || !waitersListForm.valid" (click)="submitForm()" color='success' expand="block" fill="solid" shape="round">
       Submit
     </ion-button>
   </ion-toolbar>

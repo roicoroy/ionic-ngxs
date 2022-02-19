@@ -2,17 +2,12 @@
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button (click)="settings()">
-                <ion-icon slot="start" name="settings"></ion-icon>
+                <ion-icon name="settings"></ion-icon>
             </ion-button>
         </ion-buttons>
         <ion-title>
             Home
         </ion-title>
-        <ion-buttons slot="end">
-            <ion-button (click)="deleteAll()">
-                Delete All
-            </ion-button>
-        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
@@ -28,8 +23,8 @@
     <ion-grid>
         <ion-row>
             <ion-col>
-                <ion-item button *ngFor='let entry of teamEntryArray | async' (click)='resultPage(entry)'>
-                    <ion-label>
+                <ion-item *ngFor='let entry of entriesListState | async'>
+                    <ion-label (click)='resultPage(entry)'>
                         {{ entry.date | date }}
                     </ion-label>
                     <ion-text color='danger' slot='end' (click)='deleteEntry(entry.id)'>

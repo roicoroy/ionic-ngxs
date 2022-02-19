@@ -16,6 +16,7 @@ import { Drivers } from '@ionic/storage';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { PointsState } from './states/point.state';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { EntryState } from './states/entries.state';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     IonicModule.forRoot(),
     AppRoutingModule,
     NgxsModule.forRoot([
-
+      EntryState,
       PointsState,
       WaiterState
     ]),

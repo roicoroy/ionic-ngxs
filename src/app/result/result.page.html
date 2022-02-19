@@ -1,0 +1,60 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons *ngIf='!details' slot="start">
+      <ion-button (click)="home()">
+        <ion-icon name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons *ngIf='details' slot="start">
+      <ion-button (click)="home()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Review
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense" mode="ios">
+    <ion-toolbar>
+      <ion-card-header>
+        <ion-card-subtitle *ngIf='!details' color='success'>Congratulations!</ion-card-subtitle>
+        <ion-card-title color='secondary'>Review your shift</ion-card-title>
+      </ion-card-header>
+    </ion-toolbar>
+  </ion-header>
+  <ion-grid>
+    <ion-row>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>{{ teamEntry.date }}</ion-card-subtitle>
+          <ion-card-title>£ {{ teamEntry.tipsMade }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content *ngFor='let w of teamEntry.waiters'>
+          <ion-list>
+            <ion-item ines='none'>
+              <ion-label slot='start'>{{ w.name }}</ion-label>
+              <ion-text color='warning' slot='start'> {{ w.hours }}h </ion-text>
+              <ion-text size='small' slot='end'>£ {{ w.tipsShare }} share</ion-text>
+              <ion-note size='small' slot='end'>{{ w.totalPoints }} points total</ion-note>
+            </ion-item>
+            <ion-item lines='none' *ngFor='let p of w.pointsList' class='ion-margin'>
+              <ion-label color="primary">{{ p.label }}</ion-label>
+              <ion-text color="primary">
+                {{ p.value }}
+              </ion-text>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<!-- <ion-footer>
+  <ion-toolbar>
+    <ion-button (click)="home()" expand="block" fill="solid" shape="round">
+      Home
+    </ion-button>
+  </ion-toolbar>
+</ion-footer> -->

@@ -1,13 +1,16 @@
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, FormControl, Validators, NgForm } from '@angular/forms';
-import { NavController } from '@ionic/angular';
+import { FormGroup, FormBuilder, FormArray, FormControl, Validators, NgForm, AbstractControl } from '@angular/forms';
+import { NavigationExtras } from '@angular/router';
+import { NavController, PickerController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { WaiterActions } from '../actions/waiter.action';
-import { Waiter } from '../models';
+import { Entry, Waiter } from '../models';
 import { WaiterState } from '../states/waiter.state';
-
+import * as nanoid from 'nanoid';
+import { EntriesService } from '../services';
+import { EntryActions } from '../actions/entries.actions';
 @Component({
   selector: 'app-entry-form',
   templateUrl: './entry-form.page.html',
@@ -31,11 +34,12 @@ import { WaiterState } from '../states/waiter.state';
   ],
 })
 export class EntryFormPage implements OnInit {
-  @Select(WaiterState.getWaiterList) waitersList: Observable<Waiter[]>;
+  @Select(WaiterState.getWaiterList) waitersListState: Observable<Waiter[]>;
   @ViewChild('waitersFormRef', { static: false }) waitersFormRef: NgForm;
-
+  @ViewChild('entryFormRef', { static: false }) entryFormRef: NgForm;
   waitersListForm: FormGroup;
   entryForm: FormGroup;
+  date: FormControl;
   validationMessages = {
     tipsAmout: [
       { type: 'required', message: 'tipsAmout is required' }
@@ -44,23 +48,31 @@ export class EntryFormPage implements OnInit {
       { type: 'required', message: 'Date is required' }
     ],
   };
+  dateToday = new FormControl(new Date());
+  selectedHours = null;
+  isEntryValidFormSubmitted = true;
+
   constructor(
     private formBuilder: FormBuilder,
     private store: Store,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private pickerController: PickerController,
+    private entries: EntriesService
   ) { }
   get waitersListArray() {
     return this.waitersListForm.get('waitersList') as FormArray;
+  }
+  get dateControl(): AbstractControl {
+    return this.entryForm.get('date');
   }
   waitersListArrayControl(i) {
     return this.waitersListArray.controls[i].get('waiter') as FormControl;
   }
   ngOnInit() {
     this.store.dispatch(new WaiterActions.Get());
-    this.waitersList.subscribe((waitersList) => {
+    this.waitersListState.subscribe((waitersList) => {
       this.setupForm(waitersList);
     });
-
   }
   setupForm(waitersListData) {
     this.waitersListForm = this.formBuilder.group({
@@ -69,16 +81,25 @@ export class EntryFormPage implements OnInit {
       ])
     });
     this.entryForm = this.formBuilder.group({
-      date: ['', Validators.required],
+      // date: ['', Validators.required],
+      date: new FormControl(new Date()),
       tipsAmout: ['', Validators.required],
     });
   }
-  createField(name, totalPoints, pointsList): FormGroup {
+  createField(name, totalPoints, pointsList, hours?): FormGroup {
     return this.formBuilder.group({
       name: [name, Validators.required],
       totalPoints: [totalPoints],
-      hours: ['', Validators.required],
       pointsList: [pointsList, Validators.required],
+      // pointsList: this.formBuilder.array([this.initPointsListArrayForm(pointsList)]),
+      hours: [hours, Validators.required],
+    });
+  }
+  initPointsListArrayForm(pointsList): void {
+    return this.waitersListArray.controls.forEach((control) => {
+      // control = null;
+      console.log(control);
+      // console.log(pointsList);
     });
   }
   createFormArray(waitersListData: Waiter[]): FormGroup[] {
@@ -86,15 +107,18 @@ export class EntryFormPage implements OnInit {
     const arr = [];
     for (let i = 0; i < count; i++) {
       const totalPoints = [];
-      console.log(waitersListData[i].pointsList);
       if (waitersListData[i].pointsList != null || waitersListData[i].pointsList !== undefined) {
         waitersListData[i].pointsList.forEach((point, ind) => {
           totalPoints.push(point.value);
         });
       }
-      arr.push(this.createField(waitersListData[i].name, this.sumPointsArray(totalPoints), waitersListData[i].pointsList));
+      const hours = waitersListData[i].hours;
+      arr.push(this.createField(waitersListData[i].name, this.sumPointsArray(totalPoints), waitersListData[i].pointsList, hours));
     }
     return arr;
+  }
+  updateFormDate(value: any) {
+    this.entryForm.get('date').setValue(value);
   }
   sumPointsArray(array) {
     const sum = array.reduce((a, b) => a + b, 0);
@@ -104,9 +128,188 @@ export class EntryFormPage implements OnInit {
     this.navCtrl.navigateForward('test-page');
   }
   homePage() {
-    this.navCtrl.navigateForward('home');
+    this.navCtrl.navigateBack('home');
   }
   submitForm() {
-    console.log(this.waitersListForm);
+    console.log(this.waitersListForm, this.entryForm);
+    if (this.entryForm.invalid) {
+      console.log('entryForm invalid', this.entryForm.invalid);
+    }
+    if (this.waitersListForm.invalid) {
+      console.log('waitersListForm invalid', this.waitersListForm.invalid);
+    }
+    if (this.entryForm.valid) {
+      console.log('entryForm valid', this.entryForm.valid);
+    }
+    if (this.waitersListForm.valid) {
+      console.log('waitersListForm valid', this.waitersListForm.valid);
+    }
+    this.buildWaiterEntryObject(this.waitersListForm.value.waitersList, this.entryForm.value.date, this.entryForm.value.tipsAmout);
+  }
+  buildWaiterEntryObject(waitersList, date, tips) {
+    const entryid = nanoid(12);
+    const sumXValueArray = [];
+    waitersList.forEach((waiter) => {
+      waiter.xValue = waiter.totalPoints + waiter.hours;
+      sumXValueArray.push(waiter.xValue);
+    });
+    const aValue = this.sumPointsArray(sumXValueArray);
+    waitersList.forEach((waiter) => {
+      waiter.yValue = tips / aValue;
+      waiter.tipsShare = waiter.xValue * waiter.yValue;
+    });
+    const teamEntry = new Entry(
+      {
+        id: entryid,
+        tipsMade: tips,
+        date,
+        waiters: waitersList,
+      }
+    );
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        teamEntry: JSON.stringify(teamEntry),
+        details: false
+      }
+    };
+    // const entry = new Entry(teamEntry);
+    // this.entries.addEntry();
+    console.log(teamEntry);
+    this.store.dispatch(new EntryActions.AddEntry(teamEntry)).subscribe((res) => {
+      this.navCtrl.navigateForward(['/result'], navigationExtras);
+      console.log(res);
+    });
+    // .then(() => {
+    // });
+  }
+  async showPicker(i) {
+    const settings = {
+      cssClass: 'pickerClassName',
+      buttons: [
+        {
+          text: 'Reset',
+          role: 'cancel',
+          handler: (e) => {
+            this.selectedHours = null;
+            const hoursFormArray: any = this.waitersListArray.controls[i];
+            hoursFormArray.controls.hours.setValue(null);
+            hoursFormArray.updateValueAndValidity();
+          }
+        },
+        {
+          text: 'Ok',
+          handler: (e) => {
+            const hours = e.hours.value;
+            const quarters = e.quarters.value;
+            const hoursString: any = [`${hours}.${quarters}`];
+            const hoursNumber: number = parseFloat(hoursString);
+            const hoursFormArray: any = this.waitersListArray.controls[i];
+            const waiter = new Waiter({});
+            this.waitersListState.subscribe((response: any) => {
+              console.log(response);
+              waiter.id = response[i].id;
+              waiter.name = response[i].name;
+              waiter.pointsList = response[i].pointsList;
+              waiter.hours = hoursNumber;
+            });
+            console.log(waiter);
+            this.store.dispatch(new WaiterActions.Update(waiter, waiter.id));
+            this.waitersListState.subscribe((response: any) => {
+              this.createFormArray(response);
+            });
+            // eslint-disable-next-line max-len
+            // this.createField(this.waitersListArray.controls[i].name, this.sumPointsArray(totalPoints), waitersListData[i].pointsList, hours);
+            // const waiterId: any = this.waitersListArray.controls[i].value.id;
+            // console.log(waiterId);
+            hoursFormArray.controls.hours.setValue(hoursNumber);
+            // hoursFormArray.controls.hours.setErrors(null);
+            hoursFormArray.updateValueAndValidity();
+            // this.selectedHours = hoursFormArray.controls.hours.value;
+          },
+        }
+      ],
+      columns: [
+        {
+          name: 'hours',
+          options: [
+            {
+              text: '1',
+              value: 1
+            },
+            {
+              text: '2',
+              value: 2
+            },
+            {
+              text: '3',
+              value: 3
+            },
+            {
+              text: '4',
+              value: 4
+            },
+            {
+              text: '5',
+              value: 5
+            },
+            {
+              text: '6',
+              value: 6
+            },
+            {
+              text: '7',
+              value: 7
+            },
+            {
+              text: '8',
+              value: 8
+            },
+            {
+              text: '9',
+              value: 9
+            },
+            {
+              text: '10',
+              value: 10
+            },
+            {
+              text: '11',
+              value: 11
+            },
+            {
+              text: '12',
+              value: 12
+            },
+            {
+              text: '13',
+              value: 13
+            },
+          ]
+        },
+        {
+          name: 'quarters',
+          options: [
+            {
+              text: '00',
+              value: 0
+            },
+            {
+              text: '25',
+              value: 25
+            },
+            {
+              text: '50',
+              value: 50
+            },
+            {
+              text: '75',
+              value: 75
+            },
+          ]
+        }
+      ],
+    };
+    const picker = await this.pickerController.create(settings);
+    picker.present();
   }
 }

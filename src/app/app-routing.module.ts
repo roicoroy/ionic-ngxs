@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'entry-form',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
@@ -16,20 +16,16 @@ const routes: Routes = [
     loadChildren: () => import('./calculator-ngxs/calculator-ngxs.module').then(m => m.CalculatorNgxsPageModule)
   },
   {
-    path: 'settings-ngxs',
-    loadChildren: () => import('./settings-ngxs/settings-ngxs.module').then(m => m.SettingsNgxsPageModule)
-  },
-  {
     path: 'result',
-    loadChildren: () => import('./calculator-ngxs/result/result.module').then( m => m.ResultPageModule)
-  },
-  {
-    path: 'test-page',
-    loadChildren: () => import('./test-page/test-page.module').then( m => m.TestPagePageModule)
+    loadChildren: () => import('./result/result.module').then(m => m.ResultPageModule)
   },
   {
     path: 'entry-form',
-    loadChildren: () => import('./entry-form/entry-form.module').then( m => m.EntryFormPageModule)
+    loadChildren: () => import('./entry-form/entry-form.module').then(m => m.EntryFormPageModule)
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./settings-tabs/tabs.module').then(m => m.TabsPageModule)
   },
 ];
 

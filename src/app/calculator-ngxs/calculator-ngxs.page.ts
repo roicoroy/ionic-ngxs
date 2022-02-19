@@ -146,9 +146,12 @@ export class CalculatorNgxsPage implements OnInit {
     });
   }
   setupForm(waitersListData) {
-    this.dateForm = new FormGroup({
-      date: this.date,
-    });
+    const today = new Date();
+    const month = today.getMonth();
+    const year = today.getFullYear();
+    // this.dateForm = new FormGroup({
+    //   date: new FormControl(new Date(year, month, 13)),
+    // });
     this.waitersListForm = this.formBuilder.group({
       waitersList: this.formBuilder.array([
         ...this.createFormArray(waitersListData)

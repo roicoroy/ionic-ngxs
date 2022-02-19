@@ -6,7 +6,6 @@ import { WaiterActions } from '../actions/waiter.action';
 import { IonStorageService } from '../services';
 import { Storage } from '@ionic/storage-angular';
 import { Waiter } from '../models/waiters.type';
-import * as nanoid from 'nanoid';
 import { WaitersService } from '../services/waiters.service';
 
 export const WAITERS_LIST_KEY = 'waitersList';

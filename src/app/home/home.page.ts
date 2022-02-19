@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { EntryActions } from '../actions/entries.actions';
 import { TeamEntry, TEAM_ENTRY } from '../calculator-ngxs/calculator-ngxs.page';
+import { Entry } from '../models';
 import { EntriesService, IonStorageService } from '../services';
+import { EntryState } from '../states/entries.state';
 
 @Component({
   selector: 'app-home',
@@ -11,49 +15,40 @@ import { EntriesService, IonStorageService } from '../services';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  public teamEntryArray: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  @Select(EntryState.getEntryList) entriesListState: Observable<Entry[]>;
   sub: Subscription;
   data;
   constructor(
     private navCtrl: NavController,
     private entries: EntriesService,
     private ionStorageService: IonStorageService,
+    private store: Store
   ) { }
   ngOnInit() {
-    // this.sub = this.ionStorageService.getKeyAsObservable(TEAM_ENTRY).subscribe((entries) => {
-    //   this.data = entries;
-    //   this.teamEntryArray.next(entries);
-    //   console.log(entries);
-    // });
+    this.store.dispatch(new EntryActions.GetEntries());
   }
-  // calculator(){
-  // //   this.navCtrl.navigateBack('test-array');
-  // // }
   calculator() {
-    this.navCtrl.navigateBack('entry-form');
+    this.navCtrl.navigateForward('entry-form');
   }
   settings() {
-    this.navCtrl.navigateBack('settings-ngxs');
+    this.navCtrl.navigateBack('settings/tabs/waiters');
   }
   resultPage(teamEntry) {
     const navigationExtras: NavigationExtras = {
       queryParams: {
         teamEntry: JSON.stringify(teamEntry),
+        details: true
       }
     };
-    this.entries.addEntry(teamEntry).then(() => {
-      this.navCtrl.navigateForward(['/result'], navigationExtras).then(() => {
-      });
-    });
+    this.navCtrl.navigateForward(['/result'], navigationExtras);
   }
   deleteEntry(id) {
     this.entries.deleteEntry(id).then((result) => {
       console.log(result);
-      this.teamEntryArray.next(result);
     });
   }
   deleteAll() {
-    this.entries.deleteAll();
-    this.teamEntryArray.next([]);
+    // this.entries.deleteAll();
+    // this.teamEntryArray.next([]);
   }
 }
