@@ -44,7 +44,7 @@ export class WaitersPage implements OnInit {
       // newWaiter.
       const newWaiter = new Waiter({
         id: null,
-        name: data.name,
+        name: data,
         tipsShare: null,
         hours: null,
         pointsList: null,

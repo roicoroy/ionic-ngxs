@@ -21,7 +21,7 @@ export class HomePage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private entries: EntriesService,
-    private ionStorageService: IonStorageService,
+    // private ionStorageService: IonStorageService,
     private store: Store
   ) { }
   ngOnInit() {

@@ -20,17 +20,6 @@
       </ion-card-header>
     </ion-toolbar>
   </ion-header>
-  <!-- <ion-row>
-  <ion-toolbar>
-    <ion-title>Waiter's List</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="addWaiter()">
-        <ion-icon name="arrow-up"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-row> -->
-
   <ion-card *ngFor="let w of waitersList | async; let i = index">
     <ion-card-content>
       <ion-item lines='none'>

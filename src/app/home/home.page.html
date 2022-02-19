@@ -25,7 +25,7 @@
             <ion-col>
                 <ion-item *ngFor='let entry of entriesListState | async'>
                     <ion-label (click)='resultPage(entry)'>
-                        {{ entry.date | date }}
+                        {{ entry.date | date }}, tips made: £{{ entry.tipsMade }}
                     </ion-label>
                     <ion-text color='danger' slot='end' (click)='deleteEntry(entry.id)'>
                         <ion-icon color='danger' name="close"></ion-icon>
@@ -34,7 +34,6 @@
             </ion-col>
         </ion-row>
     </ion-grid>
-
 </ion-content>
 <ion-footer>
     <ion-toolbar>
