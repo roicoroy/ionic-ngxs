@@ -37,53 +37,11 @@
           [(ngModel)]="w.pointsList" [isMultiple]="true" confirmButtonText="OK" closeButtonText="Close"
           (onChange)='onSelectTableChange($event, i)'>
           <ng-template ionicSelectableIconTemplate>
-            <!-- <ion-button size='small' expand="block" fill="solid" shape="round"> -->
               <ion-icon name="caret-down-outline"></ion-icon>
-            <!-- </ion-button> -->
           </ng-template>
           <ng-template ionicSelectableItemTemplate let-point="item" let-isPortSelected="isItemSelected">
             {{ point.label }} ({{ point.value }})
           </ng-template>
-          <!-- <ng-template ionicSelectableValueTemplate let-points="value">
-
-            <ion-item lines="none" class="points-list" *ngFor="let port of points">
-              <ion-label>
-                {{ port.label }}
-              </ion-label>
-              <ion-note slot='end'>
-                {{ port.value }}
-              </ion-note>
-            </ion-item>
-
-          </ng-template>
-          <ng-template ionicSelectableHeaderTemplate>
-            <ion-header>
-              <ion-toolbar color='dark'>
-                <ion-buttons>
-                  <ion-button (click)="selectPointsComponent.close()">
-                    {{selectPointsComponent.closeButtonText}}
-                  </ion-button>
-                </ion-buttons>
-                <ion-title>
-                  {{selectPointsComponent.label}}
-                </ion-title>
-              </ion-toolbar>
-            </ion-header>
-          </ng-template>
-          <ng-template ionicSelectableFooterTemplate>
-            <ion-toolbar color='dark'>
-              <ion-buttons class="full-width flex align-items-center justify-content-space-between">
-                <ion-button fill='solid' shape="round" color="medium" (click)="togglePoints()">
-                  {{ selectPointsComponent.itemsToConfirm.length ? 'Deselect' : 'Select' }}
-                  All
-                </ion-button>
-                <ion-button fill='solid' shape="round" color="success" (click)="confirm()">
-                  <span>{{selectPointsComponent.confirmButtonText}}</span>
-                </ion-button>
-              </ion-buttons>
-            </ion-toolbar>
-          </ng-template> -->
-        
         </ionic-selectable>
       </ion-item>
     </ion-card-content>
