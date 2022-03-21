@@ -51,5 +51,16 @@ export class EntryState {
             });
         });
     }
+    @Action(EntryActions.DeleteEntry)
+    deleteWaiter({ getState, setState }: StateContext<EntryStateModel>, { id }: EntryActions.DeleteEntry) {
+        return this.entriesService.deleteEntry(id).then(() => {
+            const state = getState();
+            const filteredArray = state.entries.filter((item) => item.id !== id);
+            setState({
+                ...state,
+                entries: filteredArray,
+            });
+        });
+    }
 }
 

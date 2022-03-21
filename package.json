@@ -1,10 +1,11 @@
 {
-  "name": "ionic-ngxs",
+  "name": "Tips Share",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
+    "ion-start": "ionic serve --port 8001",
     "start": "concurrently \"ionic serve --open\" \"npx json-server --watch db.json\"",
     "build": "ng build",
     "test": "ng test",

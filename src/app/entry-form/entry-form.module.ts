@@ -14,7 +14,7 @@ import { MaterialModule } from '../material.module';
     FormsModule,
     IonicModule,
     EntryFormPageRoutingModule,
-    MaterialModule,
+    // MaterialModule,
     ReactiveFormsModule,
   ],
   declarations: [

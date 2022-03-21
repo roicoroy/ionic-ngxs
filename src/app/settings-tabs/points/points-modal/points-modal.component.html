@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color='tertiary'>
+  <ion-toolbar>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">
         <ion-icon name="close"></ion-icon>
@@ -8,7 +8,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content color='dark'>
+<ion-content>
   <form [formGroup]="createPointsForm" #createPointFormRef="ngForm">
     <ion-card>
       <ion-card-header>
@@ -35,7 +35,7 @@
   </form>
 </ion-content>
 <ion-footer>
-  <ion-toolbar color='tertiary'>
+  <ion-toolbar>
     <ion-button [disabled]="!createPointsForm.valid" (click)="isEdit ? saveEditedPoint() : addNewPoint()" expand="block"
       fill="solid" shape="round">
       {{isEdit ? 'Save Edit Point' : 'Add New Point'}}

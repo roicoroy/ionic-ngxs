@@ -16,11 +16,11 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense" mode="ios">
+  <ion-header collapse="condense">
     <ion-toolbar>
       <ion-card-header>
         <ion-card-subtitle *ngIf='!details' color='success'>Congratulations!</ion-card-subtitle>
-        <ion-card-title color='secondary'>Review your shift</ion-card-title>
+        <ion-card-title *ngIf='details' color='secondary'>Review your shift</ion-card-title>
       </ion-card-header>
     </ion-toolbar>
   </ion-header>
@@ -28,22 +28,25 @@
     <ion-row>
       <ion-card>
         <ion-card-header>
-          <ion-card-subtitle>{{ teamEntry.date }}</ion-card-subtitle>
-          <ion-card-title>£ {{ teamEntry.tipsMade }}</ion-card-title>
+          <ion-card-subtitle>{{ teamEntry.date | date }}</ion-card-subtitle>
+          <ion-card-title> {{ teamEntry.tipsMade | currency:'GBP' }} </ion-card-title>
         </ion-card-header>
         <ion-card-content *ngFor='let w of teamEntry.waiters'>
           <ion-list>
-            <ion-item ines='none'>
-              <ion-label slot='start'>{{ w.name }}</ion-label>
-              <ion-text color='warning' slot='start'> {{ w.hours }}h </ion-text>
-              <ion-text size='small' slot='end'>£ {{ w.tipsShare }} share</ion-text>
-              <ion-note size='small' slot='end'>{{ w.totalPoints }} points total</ion-note>
+            <ion-item lines='none'>
+              <ion-label>{{ w.name }}</ion-label>
+              <ion-note slot='end'> {{ w.hours }}h </ion-note>
+              <ion-text slot='end'> {{ w.tipsShare | currency:'GBP' }} </ion-text>
             </ion-item>
-            <ion-item lines='none' *ngFor='let p of w.pointsList' class='ion-margin'>
+            <ion-item lines='full' *ngFor='let p of w.pointsList' class='ion-margin'>
               <ion-label color="primary">{{ p.label }}</ion-label>
               <ion-text color="primary">
                 {{ p.value }}
               </ion-text>
+            </ion-item>
+            <ion-item lines='none'>
+              <ion-text slot="start"> Total points: </ion-text>
+              <ion-label slot="end">{{ w.totalPoints }}</ion-label>
             </ion-item>
           </ion-list>
         </ion-card-content>
@@ -51,10 +54,3 @@
     </ion-row>
   </ion-grid>
 </ion-content>
-<!-- <ion-footer>
-  <ion-toolbar>
-    <ion-button (click)="home()" expand="block" fill="solid" shape="round">
-      Home
-    </ion-button>
-  </ion-toolbar>
-</ion-footer> -->

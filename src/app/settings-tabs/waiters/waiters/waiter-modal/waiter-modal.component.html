@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color='tertiary'>
+  <ion-toolbar>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">
         <ion-icon name="close"></ion-icon>
@@ -8,7 +8,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content color='dark'>
+<ion-content>
   <form [formGroup]="createWaiterForm" #createWaiterFormRef="ngForm">
     <ion-card>
       <ion-card-header>
@@ -27,7 +27,7 @@
   </form>
 </ion-content>
 <ion-footer>
-  <ion-toolbar color='tertiary'>
+  <ion-toolbar>
     <ion-button [disabled]="!createWaiterForm.valid" (click)="isEdit ? saveEWaiterPoint() : addNewWaiter()" expand="block"
       fill="solid" shape="round">
       {{isEdit ? 'Save Edited Waiter' : 'Add New Waiter'}}

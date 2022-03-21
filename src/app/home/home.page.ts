@@ -45,6 +45,9 @@ export class HomePage implements OnInit {
   deleteEntry(id) {
     this.entries.deleteEntry(id).then((result) => {
       console.log(result);
+      this.store.dispatch(new EntryActions.DeleteEntry(result)).subscribe(()=>{
+        this.store.dispatch(new EntryActions.GetEntries());
+      });
     });
   }
   deleteAll() {

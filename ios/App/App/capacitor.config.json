@@ -1,6 +1,13 @@
 {
-	"appId": "io.ionic.starter",
-	"appName": "ionic-ngxs",
+	"appId": "uk.tips.share",
+	"appName": "Tips Share",
 	"webDir": "www",
-	"bundledWebRuntime": false
+	"bundledWebRuntime": false,
+	"plugins": {
+		"Keyboard": {
+			"resize": "none",
+			"style": "dark",
+			"resizeOnFullScreen": true
+		}
+	}
 }

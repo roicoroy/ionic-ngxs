@@ -2,7 +2,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators, NgForm, AbstractControl } from '@angular/forms';
 import { NavigationExtras } from '@angular/router';
-import { NavController, PickerController } from '@ionic/angular';
+import {IonDatetime, ModalController, NavController, PickerController} from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { WaiterActions } from '../actions/waiter.action';
@@ -11,6 +11,8 @@ import { WaiterState } from '../states/waiter.state';
 import * as nanoid from 'nanoid';
 import { EntriesService } from '../services';
 import { EntryActions } from '../actions/entries.actions';
+import { Keyboard } from '@capacitor/keyboard';
+import { format, parseISO } from 'date-fns';
 @Component({
   selector: 'app-entry-form',
   templateUrl: './entry-form.page.html',
@@ -37,11 +39,17 @@ export class EntryFormPage implements OnInit {
   @Select(WaiterState.getWaiterList) waitersListState: Observable<Waiter[]>;
   @ViewChild('waitersFormRef', { static: false }) waitersFormRef: NgForm;
   @ViewChild('entryFormRef', { static: false }) entryFormRef: NgForm;
+
+  @ViewChild('popoverDatetime', { static: true }) popoverDatetime: IonDatetime;
+  @ViewChild(IonDatetime, { static: true }) datetime: any;
+
+  dateValue = '';
+  dateValue2 = '';
   waitersListForm: FormGroup;
   entryForm: FormGroup;
   date: FormControl;
   validationMessages = {
-    tipsAmout: [
+    tipsAmount: [
       { type: 'required', message: 'tipsAmout is required' }
     ],
     date: [
@@ -51,13 +59,14 @@ export class EntryFormPage implements OnInit {
   dateToday = new FormControl(new Date());
   selectedHours = null;
   isEntryValidFormSubmitted = true;
-
+  isKeyboardHide = null;
   constructor(
     private formBuilder: FormBuilder,
     private store: Store,
     private navCtrl: NavController,
     private pickerController: PickerController,
-    private entries: EntriesService
+    private entries: EntriesService,
+    public modal: ModalController
   ) { }
   get waitersListArray() {
     return this.waitersListForm.get('waitersList') as FormArray;
@@ -67,6 +76,27 @@ export class EntryFormPage implements OnInit {
   }
   waitersListArrayControl(i) {
     return this.waitersListArray.controls[i].get('waiter') as FormControl;
+  }
+  confirm() {
+    // this.datetime.confirm(); //nativeEl.confirm();
+    console.log(this.datetime);
+  }
+  dismissModal() {
+    this.modal.dismiss();
+  }
+  onDateTimeChange(){
+    // this.dateValue2 = this.formatDate(this.datetime.value);
+    // console.log(this.datetime.value);
+    // console.log(this.dateValue2);
+    console.log('fefefefefe');
+  }
+  reset() {
+    console.log(this.datetime.value);
+    this.datetime.nativeEl.reset();
+  }
+
+  formatDate(value: string) {
+    return format(parseISO(value), 'MMM dd yyyy');
   }
   ngOnInit() {
     this.store.dispatch(new WaiterActions.Get());
@@ -83,7 +113,7 @@ export class EntryFormPage implements OnInit {
     this.entryForm = this.formBuilder.group({
       // date: ['', Validators.required],
       date: new FormControl(new Date()),
-      tipsAmout: ['', Validators.required],
+      tipsAmount: ['', Validators.required],
     });
   }
   createField(name, totalPoints, pointsList, hours?): FormGroup {
